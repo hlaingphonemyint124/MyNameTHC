@@ -1,0 +1,101 @@
+name,category,description,thc,cbd,effects,aroma,flavor,is_new,is_popular,is_featured
+OG Kush,Indica,"A legendary strain with a complex aroma of earth, pine, and lemon. Known for its euphoric and relaxing effects.",23.0,0.2,"Euphoric,Relaxed,Happy,Sleepy","Earthy,Pine,Lemon","Woody,Citrus,Pine",false,true,true
+Blue Dream,Hybrid,"A California classic. Balanced full-body relaxation with gentle cerebral stimulation.",21.0,0.1,"Uplifted,Relaxed,Happy,Creative","Blueberry,Sweet,Earthy","Blueberry,Vanilla,Sweet",false,true,true
+Sour Diesel,Sativa,"Energizing sativa known for its pungent diesel aroma and fast-acting dreamy effects.",22.0,0.2,"Energetic,Uplifted,Happy,Creative","Diesel,Earthy,Citrus","Diesel,Citrus,Earthy",false,true,false
+Girl Scout Cookies,Hybrid,"GSC delivers a potent combination of euphoric, full-body effects and lasting pain relief.",28.0,0.2,"Euphoric,Happy,Relaxed,Creative","Sweet,Earthy,Pungent","Sweet,Mint,Cherry",false,true,true
+Granddaddy Purple,Indica,"Classic indica with dense buds and a complex grape-berry aroma. Perfect for evening relaxation.",17.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Grape,Berry,Sweet","Grape,Berry,Sweet",false,true,false
+Jack Herer,Sativa,"A legendary sativa named after the cannabis activist. Uplifting and creative.",18.0,0.1,"Energetic,Creative,Happy,Uplifted","Pine,Earthy,Wood","Pine,Wood,Spicy",false,false,false
+Northern Lights,Indica,"One of the most famous indicas of all time. Resinous buds, fast flowering.",18.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Sweet,Earthy,Pine","Sweet,Spicy,Pine",false,true,false
+Gorilla Glue #4,Hybrid,"Heavy-handed euphoria and relaxation leaving you feeling glued to the couch.",27.0,0.1,"Relaxed,Euphoric,Happy,Sleepy","Earthy,Pine,Diesel","Coffee,Chocolate,Diesel",false,true,false
+White Widow,Hybrid,"A balanced hybrid with powerful bursts of euphoria and energy. Coffee-shop classic.",20.0,0.2,"Energetic,Euphoric,Creative,Happy","Earthy,Woody,Floral","Earthy,Floral,Sweet",false,false,false
+Purple Haze,Sativa,"Inspired by the Jimi Hendrix song. A classic strain with dreamy, psychedelic effects.",20.0,0.1,"Euphoric,Happy,Creative,Energetic","Earthy,Sweet,Berry","Berry,Sweet,Spicy",false,false,false
+Amnesia Haze,Sativa,"A fast-hitting sativa with long-lasting euphoric effects and an earthy lemon scent.",22.0,0.1,"Euphoric,Happy,Energetic,Uplifted","Lemon,Earthy,Citrus","Lemon,Citrus,Sweet",false,false,false
+Trainwreck,Hybrid,"A mind-bending, potent sativa. Fast-acting euphoria for chronic pain and anxiety.",18.0,0.1,"Euphoric,Happy,Creative,Energetic","Lemon,Pine,Earthy","Lemon,Pine,Sweet",false,false,false
+AK-47,Hybrid,"Despite its tough name, AK-47 is a mellow strain with a sweet, floral aroma.",20.0,0.2,"Relaxed,Happy,Uplifted,Creative","Earthy,Floral,Sandalwood","Sweet,Floral,Earthy",false,false,false
+Pineapple Express,Hybrid,"A sweet, tropical hybrid. Produces long-lasting energetic effects.",19.0,0.1,"Happy,Energetic,Uplifted,Creative","Pineapple,Tropical,Citrus","Pineapple,Mango,Citrus",false,true,false
+Skywalker OG,Indica,"A potent indica with a pungent diesel aroma. Great for stress relief.",26.0,0.2,"Relaxed,Sleepy,Euphoric,Happy","Earthy,Pine,Diesel","Sweet,Spicy,Diesel",false,false,false
+Wedding Cake,Hybrid,"Rich and tangy flavor profile with relaxing and euphoric effects.",25.0,0.1,"Relaxed,Euphoric,Happy,Uplifted","Sweet,Earthy,Vanilla","Sweet,Vanilla,Cake",true,true,true
+Runtz,Hybrid,"Rare evenly balanced hybrid with sweet, fruity, and tropical flavors.",24.0,0.1,"Euphoric,Relaxed,Happy,Uplifted","Fruity,Tropical,Sweet","Candy,Fruit,Sweet",true,true,true
+Zkittlez,Indica,"Award-winning strain with a delightfully fruity and tropical flavor.",19.0,0.5,"Relaxed,Happy,Euphoric,Sleepy","Fruity,Tropical,Sweet","Candy,Fruit,Sweet",false,true,false
+Gelato,Hybrid,"A potent hybrid that produces euphoric effects accompanied by strong relaxation.",21.0,0.1,"Euphoric,Happy,Relaxed,Creative","Sweet,Citrus,Fruity","Sweet,Citrus,Berry",false,true,true
+Mimosa,Sativa,"Bright and citrusy, this energetic sativa is perfect for daytime use.",19.0,0.1,"Energetic,Happy,Uplifted,Creative","Citrus,Orange,Sweet","Orange,Citrus,Sweet",true,false,false
+Durban Poison,Sativa,"A pure South African landrace sativa. Clean, energetic high perfect for daytime.",20.0,0.1,"Energetic,Uplifted,Happy,Creative","Sweet,Earthy,Pine","Sweet,Anise,Pine",false,false,false
+Strawberry Cough,Sativa,"Famous for its sweet strawberry aroma and for making people cough.",18.0,0.1,"Uplifted,Energetic,Happy,Creative","Strawberry,Sweet,Earthy","Strawberry,Sweet,Berry",false,false,false
+Chemdawg,Hybrid,"A legendary hybrid with a distinct diesel aroma and cerebral effect.",19.0,0.1,"Happy,Euphoric,Relaxed,Creative","Diesel,Earthy,Pungent","Diesel,Chemical,Citrus",false,false,false
+Bubba Kush,Indica,"A classic indica with strong sedating effects. Heavy with sweet hashish flavors.",17.0,0.1,"Sleepy,Relaxed,Happy,Euphoric","Sweet,Earthy,Coffee","Sweet,Coffee,Chocolate",false,false,false
+Super Lemon Haze,Sativa,"A zesty strain with energetic effects and a bright citrus flavor.",20.0,0.2,"Energetic,Happy,Uplifted,Creative","Lemon,Citrus,Sweet","Lemon,Citrus,Sweet",false,false,false
+Blueberry,Indica,"A legendary indica strain with a deliciously sweet blueberry flavor.",17.0,0.2,"Relaxed,Happy,Sleepy,Euphoric","Blueberry,Sweet,Earthy","Blueberry,Sweet,Vanilla",false,false,false
+Headband,Hybrid,"Produces a cerebral, lingering effect. Named for the headband-like pressure felt.",21.0,0.1,"Relaxed,Happy,Euphoric,Creative","Earthy,Diesel,Lemon","Lemon,Citrus,Diesel",false,false,false
+Green Crack,Sativa,"Stimulating and invigorating. Despite the name, this is just a great sativa.",16.0,0.1,"Energetic,Uplifted,Happy,Creative","Sweet,Earthy,Citrus","Mango,Citrus,Sweet",false,true,false
+Lemon Haze,Sativa,"A vibrant sativa dominant hybrid with a strong lemon aroma and zesty flavor.",20.0,0.2,"Uplifted,Happy,Energetic,Creative","Lemon,Citrus,Sweet","Lemon,Citrus,Sweet",false,false,false
+Og Cheese,Indica,"British classic with a pungent skunky aroma and a relaxing body high.",18.0,0.1,"Relaxed,Happy,Euphoric,Sleepy","Cheese,Earthy,Pungent","Cheese,Earthy,Butter",false,false,false
+Critical Mass,Indica,"Heavy yields and a sweet, earthy flavor. Good for pain and insomnia.",19.0,0.3,"Relaxed,Sleepy,Happy,Euphoric","Sweet,Earthy,Floral","Sweet,Citrus,Earthy",false,false,false
+Death Star,Indica,"A powerful indica with a sweet diesel flavor and crushing sedative effects.",22.0,0.1,"Sleepy,Relaxed,Euphoric,Happy","Diesel,Sweet,Earthy","Sweet,Diesel,Spicy",false,false,false
+LA Confidential,Indica,"A fast-acting, potent indica with pine and earthy notes.",22.0,0.2,"Relaxed,Sleepy,Happy,Euphoric","Pine,Earthy,Floral","Pine,Earthy,Sweet",false,false,false
+Maui Wowie,Sativa,"A classic strain from Hawaii with tropical pineapple flavors.",19.0,0.1,"Energetic,Happy,Creative,Uplifted","Pineapple,Tropical,Sweet","Pineapple,Citrus,Sweet",false,false,false
+Panama Red,Sativa,"A legendary landrace sativa from Panama. Slow build, long-lasting high.",18.0,0.1,"Energetic,Creative,Happy,Uplifted","Earthy,Sweet,Pine","Earthy,Sweet,Wood",false,false,false
+Romulan,Indica,"A potent indica named after the Star Trek alien race. Deeply relaxing.",22.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Pine,Earthy,Woody","Pine,Spicy,Earthy",false,false,false
+Super Silver Haze,Sativa,"A three-time Cannabis Cup winner with energizing, long-lasting effects.",18.0,0.1,"Energetic,Happy,Uplifted,Creative","Earthy,Sweet,Citrus","Sweet,Citrus,Earthy",false,false,false
+Tangie,Sativa,"A remake of the old-school Tangerine Dream. Refreshing citrus flavor.",19.0,0.1,"Uplifted,Happy,Energetic,Creative","Orange,Citrus,Sweet","Orange,Citrus,Sweet",true,false,false
+Cherry Pie,Hybrid,"A cross of Granddaddy Purple and Durban Poison. Sweet and sour cherry smell.",16.0,0.1,"Happy,Euphoric,Relaxed,Creative","Cherry,Sweet,Earthy","Cherry,Sweet,Berry",false,false,false
+Thin Mint GSC,Hybrid,"A phenotype of Girl Scout Cookies with a cool, minty flavor.",24.0,0.1,"Euphoric,Relaxed,Happy,Creative","Mint,Sweet,Earthy","Mint,Cookie,Sweet",false,false,false
+Kosher Kush,Indica,"A multi-award winning indica with extremely high THC content.",21.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Pine,Woody","Earthy,Pine,Spicy",false,false,false
+Bruce Banner,Hybrid,"Named after the Incredible Hulk's alter ego. One of the strongest strains.",28.0,0.1,"Euphoric,Creative,Happy,Energetic","Diesel,Sweet,Earthy","Diesel,Sweet,Strawberry",false,true,false
+Candyland,Sativa,"A California sativa bred from Grand Daddy Purple and Platinum Cookies.",20.0,0.2,"Energetic,Happy,Uplifted,Creative","Sweet,Earthy,Candy","Sweet,Candy,Earth",false,false,false
+Blackberry Kush,Indica,"A flavorful indica with prominent blackberry flavors and tranquilizing effects.",20.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Blackberry,Sweet,Earthy","Blackberry,Sweet,Berry",false,false,false
+Alaskan Thunder Fuck,Sativa,"A legendary Northern California strain with an intense euphoric and energetic high.",16.0,0.1,"Energetic,Euphoric,Happy,Uplifted","Earthy,Pine,Sweet","Pine,Sweet,Menthol",false,false,false
+Banana Kush,Hybrid,"A laid-back hybrid with a sweet tropical banana flavor.",18.0,0.1,"Relaxed,Happy,Euphoric,Sleepy","Banana,Sweet,Tropical","Banana,Sweet,Tropical",false,false,false
+Bio-Jesus,Indica,"A highly potent indica-dominant hybrid renowned for pain relief.",28.0,0.2,"Relaxed,Sleepy,Euphoric,Happy","Diesel,Sweet,Earthy","Diesel,Sweet,Spicy",false,false,false
+Bubblicious,Hybrid,"Bred from Bubblegum and Lavender. A fruity, candy-like hybrid.",15.0,0.2,"Relaxed,Happy,Euphoric,Creative","Sweet,Bubblegum,Fruity","Sweet,Candy,Berry",false,false,false
+Cali Orange,Sativa,"A 1980s classic California strain with a citrusy, orange aroma.",11.0,0.1,"Happy,Energetic,Uplifted,Creative","Orange,Citrus,Sweet","Orange,Citrus,Sweet",false,false,false
+Cannabis Ruderalis,Hybrid,"Auto-flowering variety used in breeding programs. Low THC, high CBD.",3.0,12.0,"Relaxed,Focused","Earthy,Herbal","Earthy,Herbal",false,false,false
+Chernobyl,Hybrid,"A fruity, electric sativa-leaning hybrid with creative and uplifting effects.",22.0,0.1,"Creative,Uplifted,Happy,Energetic","Lime,Citrus,Tropical","Lime,Tropical,Sweet",false,false,false
+Church OG,Indica,"A cross of The Church and OG Kush. Calming and sedating.",19.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Pine,Lemon","Pine,Earthy,Citrus",false,false,false
+Cinderella 99,Sativa,"A fast-acting sativa with sweet pineapple tropical flavors.",20.0,0.1,"Energetic,Happy,Creative,Uplifted","Pineapple,Tropical,Sweet","Pineapple,Citrus,Sweet",false,false,false
+Cotton Candy,Hybrid,"A sweet sativa-dominant strain with candy-like flavor.",16.0,0.2,"Happy,Uplifted,Creative,Relaxed","Sweet,Candy,Floral","Sweet,Candy,Berry",false,false,false
+Diablo,Hybrid,"A sativa-dominant strain with cerebral effects and earthy citrus flavors.",21.0,0.1,"Happy,Euphoric,Creative,Energetic","Citrus,Earthy,Sweet","Citrus,Sweet,Spicy",false,false,false
+Double Dream,Hybrid,"A cross between Blue Dream and Dream Star. Ultra sweet and cerebral.",19.0,0.1,"Creative,Happy,Uplifted,Energetic","Sweet,Citrus,Earthy","Sweet,Berry,Citrus",false,false,false
+Dream Queen,Hybrid,"An offshoot of Blue Dream with a sweet, tropical aroma.",18.0,0.2,"Happy,Creative,Uplifted,Relaxed","Sweet,Tropical,Floral","Sweet,Mango,Tropical",false,false,false
+Dutch Treat,Hybrid,"A popular strain in Amsterdam. Sweet and earthy with euphoric effects.",18.0,0.1,"Relaxed,Happy,Euphoric,Creative","Sweet,Earthy,Pine","Pine,Sweet,Earthy",false,false,false
+Fire OG,Hybrid,"One of the strongest OG strains with intensely euphoric effects.",20.0,0.2,"Euphoric,Relaxed,Happy,Sleepy","Lemon,Pine,Earthy","Lemon,Pine,Citrus",false,false,false
+Four Way,Indica,"An award-winning multi-cross indica with resinous buds and spicy flavor.",19.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Spicy,Sweet","Spicy,Earthy,Sweet",false,false,false
+Frijole,Indica,"A heavy-hitting indica from the Pacific Northwest with bean-like buds.",20.0,0.1,"Relaxed,Sleepy,Euphoric,Happy","Earthy,Pine,Sweet","Earthy,Spicy,Pine",false,false,false
+God's Gift,Indica,"A California strain born from OG Kush and Granddaddy Purple.",27.0,0.1,"Relaxed,Sleepy,Euphoric,Happy","Grape,Citrus,Berry","Grape,Berry,Sweet",false,false,false
+Golden Goat,Hybrid,"A happy, uplifting strain with a mix of tropical and sour apple aromas.",23.0,0.1,"Happy,Euphoric,Creative,Energetic","Tropical,Sour,Citrus","Citrus,Sweet,Tropical",false,false,false
+Grape Ape,Indica,"A predominantly indica strain with a noticeable grape-like flavor.",17.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Grape,Berry,Sweet","Grape,Sweet,Berry",false,false,false
+Green Queen,Hybrid,"A spicy, earthy hybrid that produces cheerful and creative effects.",16.0,0.2,"Happy,Creative,Uplifted,Relaxed","Earthy,Spicy,Floral","Spicy,Earthy,Sweet",false,false,false
+Hash Plant,Indica,"A classic indica known for its potency and resin production.",16.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Pine,Spicy","Earthy,Spicy,Pine",false,false,false
+Haze Berry,Sativa,"A cross between Blue Haze and Blueberry. Sweet with a berry aroma.",17.0,0.2,"Uplifted,Happy,Creative,Energetic","Berry,Blueberry,Sweet","Berry,Blueberry,Sweet",false,false,false
+Headspace,Sativa,"A clear-headed sativa that provides focus and creativity.",19.0,0.2,"Creative,Focused,Happy,Uplifted","Citrus,Earthy,Sweet","Citrus,Sweet,Earthy",false,false,false
+Himalayan Gold,Indica,"A landrace strain from the Himalayan mountains. Rich and resinous.",20.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Spicy,Sweet","Sweet,Spicy,Earthy",false,false,false
+Ice,Hybrid,"Indica Crystal Extreme. A resin-heavy hybrid with a sweet, earthy flavor.",18.0,0.2,"Relaxed,Happy,Euphoric,Sleepy","Earthy,Sweet,Floral","Sweet,Earthy,Floral",false,false,false
+Island Sweet Skunk,Sativa,"A sweet tropical sativa with uplifting and energizing effects.",18.0,0.1,"Energetic,Happy,Uplifted,Creative","Tropical,Sweet,Skunk","Tropical,Sweet,Citrus",false,false,false
+Jean Guy,Sativa,"A popular Canadian sativa with a bright citrus and pine aroma.",23.0,0.2,"Creative,Uplifted,Happy,Energetic","Citrus,Pine,Earthy","Citrus,Pine,Sweet",false,false,false
+Juicy Fruit,Hybrid,"A tropical hybrid with a sweet and fruity flavor profile.",16.0,0.2,"Happy,Uplifted,Creative,Relaxed","Tropical,Fruity,Sweet","Sweet,Fruity,Tropical",false,false,false
+Jillybean,Hybrid,"A sweet, candy-like hybrid with uplifting and mood-enhancing effects.",15.0,0.2,"Happy,Uplifted,Creative,Energetic","Orange,Mango,Sweet","Orange,Mango,Sweet",true,false,false
+K2,Hybrid,"Named after the mountain. A potent hybrid with earthy pine flavors.",20.0,0.1,"Relaxed,Happy,Euphoric,Sleepy","Pine,Earthy,Woody","Pine,Earthy,Spicy",false,false,false
+Killer Queen,Hybrid,"A sativa-dominant cross between G13 and Cinderella 99.",18.0,0.2,"Happy,Creative,Uplifted,Euphoric","Sweet,Tropical,Earthy","Sweet,Tropical,Citrus",false,false,false
+King's Bread,Sativa,"A landrace sativa from Jamaica with sweet and earthy notes.",15.0,0.1,"Energetic,Happy,Creative,Uplifted","Earthy,Sweet,Spicy","Sweet,Earthy,Spicy",false,false,false
+Kush,Indica,"The original Kush landrace from the Hindu Kush mountains.",17.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Pine,Floral","Earthy,Pine,Sweet",false,false,false
+L.A. Woman,Sativa,"A sativa from Los Angeles with a bright citrus and diesel aroma.",17.0,0.1,"Energetic,Happy,Uplifted,Creative","Lemon,Diesel,Citrus","Lemon,Citrus,Diesel",false,false,false
+Lavender,Indica,"Named for its sweet floral aroma with undertones of spice.",20.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Lavender,Floral,Spicy","Floral,Sweet,Spicy",false,false,false
+Lemon Skunk,Hybrid,"A skunky citrus hybrid with uplifting and creative effects.",22.0,0.2,"Happy,Uplifted,Creative,Energetic","Lemon,Citrus,Skunk","Lemon,Citrus,Sweet",false,false,false
+Liberty Haze,Hybrid,"Winner of 2011 Cannabis Cup. A fast-acting, euphoric hybrid.",25.0,0.1,"Euphoric,Happy,Relaxed,Creative","Earthy,Citrus,Sweet","Citrus,Lime,Sweet",false,false,false
+Lion's Gate OG,Indica,"A potent OG phenotype with earthy citrus flavors and heavy sedation.",26.0,0.2,"Relaxed,Sleepy,Euphoric,Happy","Earthy,Lemon,Pine","Lemon,Pine,Earthy",false,false,false
+Lucky Charms,Hybrid,"A colorful, flavorful hybrid with balanced, happy effects.",20.0,0.2,"Happy,Uplifted,Creative,Relaxed","Sweet,Berry,Fruity","Sweet,Berry,Fruity",true,false,false
+Mango Kush,Indica,"A flavorful strain with a distinct mango taste and relaxing body high.",16.0,0.3,"Relaxed,Happy,Euphoric,Sleepy","Mango,Tropical,Sweet","Mango,Sweet,Tropical",false,true,false
+Mazar,Indica,"A classic indica from Afghanistan and Pakistan. Heavy and sedating.",21.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Earthy,Pine,Spicy","Earthy,Spicy,Sweet",false,false,false
+Mob Boss,Hybrid,"A hybrid with a sweet, chemical lemon citrus aroma.",22.0,0.2,"Euphoric,Happy,Creative,Uplifted","Lemon,Sweet,Chemical","Lemon,Sweet,Citrus",false,false,false
+Moonshine Haze,Sativa,"A potent, clear-headed sativa with a spicy haze aroma.",24.0,0.1,"Energetic,Creative,Uplifted,Happy","Earthy,Spicy,Haze","Spicy,Earthy,Sweet",false,false,false
+Mr. Nice,Indica,"Bred by Sensi Seeds from G13 and Hash Plant. Named after Howard Marks.",18.0,0.2,"Relaxed,Sleepy,Happy,Euphoric","Sweet,Floral,Earthy","Sweet,Floral,Earthy",false,false,false
+Neroli Haze,Sativa,"A rare, uplifting sativa with a distinctive floral, citrus profile.",18.0,0.3,"Uplifted,Creative,Happy,Energetic","Floral,Citrus,Sweet","Floral,Citrus,Sweet",true,false,false
+Nexus,Hybrid,"A well-balanced hybrid from TGA Subcool Seeds with earthy haze flavors.",20.0,0.2,"Relaxed,Happy,Euphoric,Creative","Earthy,Haze,Sweet","Earthy,Sweet,Haze",false,false,false
+Neville's Haze,Sativa,"One of the original haze strains. A tall, potent pure sativa.",22.0,0.2,"Energetic,Creative,Euphoric,Happy","Earthy,Haze,Citrus","Earthy,Citrus,Spicy",false,false,false
+Ogre,Indica,"A powerful indica with a citrus lime aroma and deeply relaxing effects.",18.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Citrus,Lime,Earthy","Citrus,Sweet,Earthy",false,false,false
+Peach Skunk,Hybrid,"A fruity, peachy hybrid with a pleasant and balanced high.",17.0,0.2,"Happy,Uplifted,Relaxed,Creative","Peach,Fruity,Skunk","Peach,Sweet,Fruity",true,false,false
+Pink Kush,Indica,"A potent indica-dominant strain with a powerful body high and sweet floral aroma.",22.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Floral,Sweet,Vanilla","Sweet,Floral,Vanilla",false,true,false
+Power Plant,Sativa,"A South African sativa with spicy, earthy aromas and energetic effects.",20.0,0.2,"Energetic,Uplifted,Happy,Creative","Earthy,Spicy,Pine","Earthy,Spicy,Wood",false,false,false
+Purple Diesel,Hybrid,"A cross of Pre-98 Bubba and Sour Diesel with grape and diesel aromas.",18.0,0.1,"Happy,Uplifted,Creative,Relaxed","Grape,Diesel,Sweet","Grape,Diesel,Berry",false,false,false
+Purple Urkle,Indica,"A classic California indica with grape and berry flavors and heavy sedation.",18.0,0.1,"Relaxed,Sleepy,Happy,Euphoric","Grape,Berry,Earthy","Grape,Berry,Sweet",false,false,false
+Qush,Hybrid,"A flavorful hybrid with a grape soda taste and uplifting effects.",16.0,0.2,"Happy,Relaxed,Euphoric,Creative","Grape,Sweet,Earthy","Grape,Sweet,Berry",false,false,false
+Red Congolese,Sativa,"A pure African sativa landrace with a stimulating, cerebral high.",16.0,0.2,"Energetic,Creative,Happy,Focused","Earthy,Sweet,Fruity","Earthy,Sweet,Fruity",false,false,false
