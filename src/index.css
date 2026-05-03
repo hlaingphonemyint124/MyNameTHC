@@ -401,3 +401,9 @@
     .reveal { opacity: 1; transform: none; }
   }
 }
+
+/* Age gate scroll lock */
+html.age-gate-open,
+html.age-gate-open body {
+  overflow: hidden !important;
+}

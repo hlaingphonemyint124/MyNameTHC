@@ -1,80 +1,124 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Leaf, ShieldCheck } from "lucide-react";
 
-const STORAGE_KEY = "mnt_age_verified_v1";
-
 export const AgeGate = () => {
-  const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     try {
-      const verified = localStorage.getItem(STORAGE_KEY);
-      if (!verified) setOpen(true);
+      if (!sessionStorage.getItem("age_ok")) setVisible(true);
     } catch {
-      setOpen(true);
+      setVisible(true);
     }
   }, []);
 
-  // Lock body scroll and force scroll to top while gate is open
   useEffect(() => {
-    if (open) {
-      window.scrollTo(0, 0);
+    if (visible) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
-  }, [open]);
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [visible]);
+
+  if (!visible) return null;
 
   const accept = () => {
-    try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
-    setOpen(false);
+    try { sessionStorage.setItem("age_ok", "1"); } catch {}
+    setVisible(false);
   };
-
-  const decline = () => {
-    window.location.href = "https://www.google.com";
-  };
-
-  if (!open) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="age-gate-title"
-      className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-surface-deep/90 backdrop-blur-md animate-fade-in"
-    >
-      <div className="relative w-full max-w-md rounded-2xl bg-gradient-card hairline-strong p-8 shadow-2xl bg-noise overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex items-center justify-center mb-5">
-            <div className="h-14 w-14 rounded-full bg-accent/15 flex items-center justify-center hairline">
-              <Leaf className="h-7 w-7 text-accent" strokeWidth={1.75} />
-            </div>
+    <div style={{
+      position: "fixed",
+      top: 0, left: 0,
+      width: "100vw",
+      height: "100vh",
+      zIndex: 99999,
+      background: "hsl(145, 50%, 4%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "16px",
+      boxSizing: "border-box",
+    }}>
+      <div style={{
+        width: "100%",
+        maxWidth: "440px",
+        borderRadius: "16px",
+        padding: "clamp(24px, 5vw, 40px)",
+        background: "hsl(145, 40%, 8%)",
+        border: "1px solid hsl(145, 30%, 18%)",
+        boxShadow: "0 32px 64px -16px hsl(145 50% 2% / 0.8)",
+        boxSizing: "border-box",
+      }}>
+        {/* Icon */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+          <div style={{
+            width: "56px", height: "56px", borderRadius: "50%",
+            background: "hsl(82, 60%, 40%, 0.15)",
+            border: "1px solid hsl(82, 60%, 40%, 0.3)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Leaf style={{ width: "28px", height: "28px", color: "hsl(82, 60%, 55%)" }} strokeWidth={1.75} />
           </div>
+        </div>
 
-          <p className="eyebrow text-center mb-2">Age Verification</p>
-          <h2 id="age-gate-title" className="font-display text-3xl font-bold text-center text-foreground mb-3">
-            Are you 21 or older?
-          </h2>
-          <p className="text-sm text-muted-foreground text-center leading-relaxed mb-6">
-            My Name THC operates under Thai cannabis regulations. You must be of legal age
-            to enter this site. Please consume responsibly.
-          </p>
+        {/* Text */}
+        <p style={{
+          textAlign: "center", marginBottom: "8px",
+          fontSize: "11px", fontWeight: 600,
+          letterSpacing: "0.14em", textTransform: "uppercase",
+          color: "hsl(82, 60%, 55%)",
+        }}>
+          Age Verification
+        </p>
+        <h2 style={{
+          textAlign: "center", marginBottom: "12px",
+          fontSize: "clamp(24px, 5vw, 32px)", fontWeight: 700,
+          color: "hsl(60, 20%, 95%)",
+          fontFamily: "Fraunces, Georgia, serif",
+          lineHeight: 1.2,
+        }}>
+          Are you 21 or older?
+        </h2>
+        <p style={{
+          textAlign: "center", marginBottom: "28px",
+          fontSize: "14px", lineHeight: 1.6,
+          color: "hsl(145, 15%, 60%)",
+        }}>
+          My Name THC operates under Thai cannabis regulations. You must be of legal age to enter this site. Please consume responsibly.
+        </p>
 
-          <div className="flex flex-col gap-2.5">
-            <Button onClick={accept} variant="premium" size="lg" className="w-full rounded-md font-semibold">
-              Yes, I'm 21 or older
-            </Button>
-            <Button onClick={decline} variant="ghost" size="lg" className="w-full rounded-md text-muted-foreground hover:text-foreground">
-              No, take me back
-            </Button>
-          </div>
+        {/* Buttons */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <Button onClick={accept} variant="premium" size="lg" className="w-full rounded-md font-semibold">
+            Yes, I'm 21 or older
+          </Button>
+          <Button
+            onClick={() => window.location.href = "https://www.google.com"}
+            variant="ghost" size="lg"
+            className="w-full rounded-md text-muted-foreground hover:text-foreground"
+          >
+            No, take me back
+          </Button>
+        </div>
 
-          <div className="flex items-center justify-center gap-1.5 mt-5 text-[11px] uppercase tracking-wider text-muted-foreground">
-            <ShieldCheck className="h-3 w-3" />
-            <span>Lab tested · Compliant</span>
-          </div>
+        {/* Footer */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: "6px", marginTop: "20px",
+          fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase",
+          color: "hsl(145, 15%, 45%)",
+        }}>
+          <ShieldCheck style={{ width: "12px", height: "12px" }} />
+          <span>Lab tested · Compliant</span>
         </div>
       </div>
     </div>
