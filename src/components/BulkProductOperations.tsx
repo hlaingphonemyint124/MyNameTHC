@@ -144,7 +144,7 @@ export const BulkProductOperations = ({ products, onRefresh }: BulkProductOperat
   const allSelected = filtered.length > 0 && selectedIds.length === filtered.length;
 
   // ── Bulk DB operations ───────────────────────────────────────
-  const bulkUpdate = async (patch: Record<string, boolean>, successMsg: string) => {
+  const bulkUpdate = async (patch: { is_featured?: boolean; is_new?: boolean; is_popular?: boolean }, successMsg: string) => {
     if (!selectedIds.length) { toast.error("No products selected"); return; }
     setLoading(true);
     try {

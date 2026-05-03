@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "./ProductCard";
-import { Product } from "@/data/products";
+import type { Database } from "@/integrations/supabase/types";
+type Product = Database["public"]["Tables"]["products"]["Row"];
 import {
   Carousel,
   CarouselContent,

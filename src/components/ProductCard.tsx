@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Product } from "@/data/products";
+import type { Database } from "@/integrations/supabase/types";
+type Product = Database["public"]["Tables"]["products"]["Row"];
 import indicaImg from "@/assets/product-indica.jpg";
 import sativaImg from "@/assets/product-sativa.jpg";
 import hybridImg from "@/assets/product-hybrid.jpg";

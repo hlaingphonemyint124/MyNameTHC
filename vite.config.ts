@@ -24,7 +24,6 @@ export default defineConfig({
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-supabase': ['@supabase/supabase-js'],
           'vendor-ui': ['framer-motion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
         },
       },
     },
