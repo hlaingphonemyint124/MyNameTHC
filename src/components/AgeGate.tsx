@@ -16,6 +16,17 @@ export const AgeGate = () => {
     }
   }, []);
 
+  // Lock body scroll and force scroll to top while gate is open
+  useEffect(() => {
+    if (open) {
+      window.scrollTo(0, 0);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   const accept = () => {
     try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
     setOpen(false);
