@@ -22,7 +22,7 @@ const About = () => {
 
         {/* Mission Section */}
         <div className="max-w-4xl mx-auto mb-16 md:mb-24 reveal">
-          <div className="bg-gradient-card rounded-2xl p-8 md:p-12 hairline-strong">
+          <div className="bg-gradient-card rounded-2xl p-5 sm:p-8 md:p-12 hairline-strong">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-full bg-gradient-gold flex items-center justify-center shadow-md">
                 <Leaf className="h-5 w-5 md:h-6 md:w-6 text-accent-foreground" />
@@ -45,7 +45,7 @@ const About = () => {
           ].map((v, i) => (
             <div
               key={v.title}
-              className="bg-gradient-card rounded-xl p-8 hairline card-lift text-center reveal"
+              className="bg-gradient-card rounded-xl p-5 sm:p-8 hairline card-lift text-center reveal"
               style={{ transitionDelay: `${i * 80}ms` }}
             >
               <div className="w-14 h-14 rounded-full bg-accent/10 hairline flex items-center justify-center mx-auto mb-5">

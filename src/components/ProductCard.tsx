@@ -84,8 +84,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-3 p-5 flex-1">
-        <h3 className="font-display text-lg md:text-xl font-semibold leading-tight text-foreground group-hover:text-accent transition-colors">
+      <div className="flex flex-col gap-2.5 p-3 sm:p-5 flex-1">
+        <h3 className="font-display text-sm sm:text-base md:text-lg font-semibold leading-tight text-foreground group-hover:text-accent transition-colors">
           {product.name}
         </h3>
 

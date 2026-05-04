@@ -67,7 +67,7 @@ const Contact = () => {
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3776.5!2d98.9847!3d18.8047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da3a7e9a4ae1e3%3A0x9d5f3d8c2e8e8e8e!2s9%2F10%20Hussadhisawee%20Rd%2C%20Tambon%20Chang%20Phueak%2C%20Mueang%20Chiang%20Mai%20District%2C%20Chiang%20Mai%2050300!5e0!3m2!1sen!2sth!4v1699999999999!5m2!1sen!2sth"
                 width="100%"
-                height="420"
+                height="300"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
@@ -79,7 +79,7 @@ const Contact = () => {
 
           {/* Info Section */}
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-card rounded-2xl p-8 md:p-12 hairline-strong reveal">
+            <div className="bg-gradient-card rounded-2xl p-5 sm:p-8 md:p-12 hairline-strong reveal">
               <p className="eyebrow mb-3">Details</p>
               <h2 className="font-display text-display-md mb-8 text-foreground">Contact Information</h2>
 

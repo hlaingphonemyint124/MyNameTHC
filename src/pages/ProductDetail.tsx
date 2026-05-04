@@ -28,7 +28,7 @@ const ProductDetail = () => {
         <div className="min-h-screen">
           <Navbar />
           <div className="container pt-32 pb-20">
-            <div className="grid md:grid-cols-2 gap-10 lg:gap-16 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 max-w-6xl mx-auto">
               <div className="aspect-[4/5] bg-muted animate-pulse rounded-2xl" />
               <div className="space-y-4 pt-4">
                 <div className="h-3 w-24 bg-muted animate-pulse rounded" />
@@ -92,7 +92,7 @@ const ProductDetail = () => {
             Back to Products
           </Link>
 
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 max-w-6xl mx-auto">
 
             {/* ── Image ─────────────────────────────────────── */}
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-surface-deep">

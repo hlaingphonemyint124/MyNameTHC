@@ -12,6 +12,7 @@ export default {
         md: "2.5rem",
       },
       screens: {
+      xs: '380px',
         "2xl": "1280px",
       },
     },

@@ -52,7 +52,7 @@ export const FeaturedProducts = () => {
         {/* Mobile carousel */}
         <div className="md:hidden -mx-4 px-4 pb-3 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar">
           {products.map(product => (
-            <div key={product.id} className="shrink-0 w-[72%] snap-start">
+            <div key={product.id} className="shrink-0 w-[78vw] max-w-[300px] snap-start">
               <ProductCard product={product} />
             </div>
           ))}

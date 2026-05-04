@@ -42,13 +42,13 @@ export const ProcessStrip = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-border/40 rounded-2xl overflow-hidden border border-border/40 shadow-[0_20px_60px_-30px_hsl(var(--accent)/0.25)]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border/40 rounded-2xl overflow-hidden border border-border/40 shadow-[0_20px_60px_-30px_hsl(var(--accent)/0.25)]">
           {steps.map((step, i) => {
             const Icon = step.icon;
             return (
               <div
                 key={step.title}
-                className="process-step group relative bg-background hover:bg-surface/60 transition-colors duration-500 p-6 md:p-8 reveal"
+                className="process-step group relative bg-background hover:bg-surface/60 transition-colors duration-500 p-5 sm:p-6 md:p-8 reveal"
                 style={{ transitionDelay: `${i * 120}ms`, animationDelay: `${i * 120}ms` }}
               >
                 {/* Hover gold sweep */}

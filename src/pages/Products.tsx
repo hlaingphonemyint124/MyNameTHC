@@ -67,13 +67,13 @@ const Products = () => {
           )}
 
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="aspect-[4/5] bg-muted animate-pulse rounded-xl" />
               ))}
             </div>
           ) : filtered.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
               {filtered.map((product, i) => (
                 <div key={product.id} className="reveal" style={{ transitionDelay: `${(i % 8) * 60}ms` }}>
                   <ProductCard product={product} />
