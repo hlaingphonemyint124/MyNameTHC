@@ -73,7 +73,10 @@ const Auth = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [activeTab, setActiveTab] = useState("signin");
+  const [activeTab, setActiveTab] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("tab") === "signup" ? "signup" : "signin";
+  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

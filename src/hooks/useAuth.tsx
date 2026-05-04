@@ -18,55 +18,40 @@ export const useAuth = () => {
   });
 
   useEffect(() => {
-    // Subscribe to auth state changes first (prevents race condition)
+    // Safety timeout — if Supabase doesn't respond in 3s, stop loading
+    const timeout = setTimeout(() => {
+      setState(prev => prev.loading ? { ...prev, loading: false } : prev);
+    }, 3000);
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setState(prev => ({
-          ...prev,
-          session,
-          user: session?.user ?? null,
-          loading: false,
-          error: null,
-        }));
+        clearTimeout(timeout);
+        setState({ session, user: session?.user ?? null, loading: false, error: null });
       }
     );
 
-    // Then get existing session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
-      setState(prev => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-        loading: false,
-        error: error as AuthError | null,
-      }));
+      clearTimeout(timeout);
+      setState({ session, user: session?.user ?? null, loading: false, error: error as AuthError | null });
+    }).catch(() => {
+      clearTimeout(timeout);
+      setState(prev => ({ ...prev, loading: false }));
     });
 
-    return () => subscription.unsubscribe();
+    return () => { clearTimeout(timeout); subscription.unsubscribe(); };
   }, []);
 
   const signOut = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) console.error('Sign out error:', error);
+    await supabase.auth.signOut();
   }, []);
 
   const signInWithEmail = useCallback(async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    return { data, error };
+    return await supabase.auth.signInWithPassword({ email, password });
   }, []);
 
   const signUpWithEmail = useCallback(async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    return { data, error };
+    return await supabase.auth.signUp({ email, password });
   }, []);
 
-  return {
-    user: state.user,
-    session: state.session,
-    loading: state.loading,
-    error: state.error,
-    signOut,
-    signInWithEmail,
-    signUpWithEmail,
-  };
+  return { user: state.user, session: state.session, loading: state.loading, error: state.error, signOut, signInWithEmail, signUpWithEmail };
 };
