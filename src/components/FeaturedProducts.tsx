@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useProducts } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
   Sparkles,
   Star,
   ShieldCheck,
@@ -21,10 +19,10 @@ const imageMap: Record<string, string> = {
   hybrid: hybridImg,
 };
 
-const categoryColor: Record<string, { badge: string; dot: string }> = {
-  indica:  { badge: 'bg-purple-500/20 text-purple-200 ring-purple-400/30', dot: 'bg-purple-400' },
-  sativa:  { badge: 'bg-emerald-500/20 text-emerald-200 ring-emerald-400/30', dot: 'bg-emerald-400' },
-  hybrid:  { badge: 'bg-amber-500/20 text-amber-200 ring-amber-400/30', dot: 'bg-amber-400' },
+const categoryColor: Record<string, { badge: string; dot: string; text: string }> = {
+  indica:  { badge: 'bg-purple-500/20 text-purple-200 ring-purple-400/30', dot: 'bg-purple-400', text: 'text-purple-400' },
+  sativa:  { badge: 'bg-emerald-500/20 text-emerald-200 ring-emerald-400/30', dot: 'bg-emerald-400', text: 'text-emerald-400' },
+  hybrid:  { badge: 'bg-amber-500/20 text-amber-200 ring-amber-400/30', dot: 'bg-amber-400', text: 'text-amber-400' },
 };
 
 export const FeaturedProducts = () => {
@@ -32,88 +30,51 @@ export const FeaturedProducts = () => {
   const navigate = useNavigate();
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [prevIndex, setPrevIndex]     = useState<number | null>(null);
-  const [direction, setDirection]     = useState<'next' | 'prev'>('next');
-  const [animating, setAnimating]     = useState(false);
-  const [textVisible, setTextVisible] = useState(true);
-  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const timelineRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Touch / swipe state
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
-
-  const stopAutoplay = () => { if (autoplayRef.current) clearInterval(autoplayRef.current); };
-
-  const goTo = useCallback((next: number, dir: 'next' | 'prev') => {
-    if (animating) return;
-    setDirection(dir);
-    setTextVisible(false);
-    setTimeout(() => {
-      setPrevIndex(activeIndex);
-      setActiveIndex(next);
-      setAnimating(true);
-      setTimeout(() => { setAnimating(false); setPrevIndex(null); }, 650);
-      setTimeout(() => setTextVisible(true), 80);
-    }, 120);
-  }, [animating, activeIndex]);
-
-  const handleNext = useCallback(() => {
-    stopAutoplay();
-    goTo((activeIndex + 1) % products.length, 'next');
-  }, [activeIndex, products.length, goTo]);
-
-  const handlePrev = useCallback(() => {
-    stopAutoplay();
-    goTo((activeIndex - 1 + products.length) % products.length, 'prev');
-  }, [activeIndex, products.length, goTo]);
-
-  // Autoplay
+  // Synchronized Multi-Stage Slideshow & Card Flip Engine
   useEffect(() => {
-    if (products.length < 2) return;
-    autoplayRef.current = setInterval(() => {
-      goTo((activeIndex + 1) % products.length, 'next');
-    }, 5000);
-    return () => stopAutoplay();
-  }, [activeIndex, products.length, goTo]);
+    if (products.length === 0) return;
 
-  // Keyboard
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  handlePrev();
-      if (e.key === 'ArrowRight') handleNext();
+    const runSlideshowCycle = () => {
+      // Stage 1: Reset flip state to front for the incoming card
+      setIsFlipped(false);
+
+      // Stage 2: Wait 2.5 seconds showing the front before flipping it open
+      timelineRef.current = setTimeout(() => {
+        setIsFlipped(true);
+
+        // Stage 3: Keep back panel details visible for 3.5 seconds, then move to next slide
+        timelineRef.current = setTimeout(() => {
+          setActiveIndex((prev) => (prev + 1) % products.length);
+        }, 3500);
+
+      }, 2500);
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [handlePrev, handleNext]);
 
-  // Touch swipe
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
-    if (Math.abs(dx) > 40 && dy < 60) {
-      if (dx < 0) handleNext(); else handlePrev();
-    }
-  };
+    runSlideshowCycle();
+
+    return () => {
+      if (timelineRef.current) clearTimeout(timelineRef.current);
+    };
+  }, [activeIndex, products.length]);
 
   if (loading) {
     return (
-      <section className="py-14 md:py-20">
-        <div className="container">
-          <div className="mb-10">
-            <div className="h-3 w-40 bg-muted animate-pulse rounded mb-4" />
-            <div className="h-10 w-72 bg-muted animate-pulse rounded" />
-          </div>
-          <div className="rounded-3xl border border-border/60 overflow-hidden">
-            <div className="grid md:grid-cols-2 min-h-[500px]">
-              <div className="bg-muted animate-pulse" />
-              <div className="p-10 flex flex-col gap-5">
-                {[1,2,3,4,5].map(i => <div key={i} className="h-5 bg-muted animate-pulse rounded" />)}
-              </div>
+      <section className="py-14 md:py-20 bg-[#060F0A]">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="mb-12 flex justify-between items-end">
+            <div className="space-y-3">
+              <div className="h-4 w-32 bg-zinc-900 animate-pulse rounded" />
+              <div className="h-12 w-64 bg-zinc-900 animate-pulse rounded" />
             </div>
+            <div className="h-10 w-24 bg-zinc-900 animate-pulse rounded" />
+          </div>
+          <div className="flex justify-center gap-6 overflow-hidden py-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="w-[320px] h-[480px] bg-zinc-900/50 border border-zinc-800 animate-pulse rounded-3xl shrink-0" />
+            ))}
           </div>
         </div>
       </section>
@@ -122,258 +83,298 @@ export const FeaturedProducts = () => {
 
   if (products.length === 0) return null;
 
-  const product  = products[activeIndex];
-  const category = product.category.toLowerCase();
-  const colors   = categoryColor[category] || categoryColor.indica;
-  const price    = 800 + Math.round(product.thc * 30);
-  const fallback = imageMap[category] || indicaImg;
-
-  // Outgoing image (for cross-fade)
-  const prevProduct = prevIndex !== null ? products[prevIndex] : null;
-  const prevFallback = prevProduct ? (imageMap[prevProduct.category.toLowerCase()] || indicaImg) : null;
-
-  const slideIn  = direction === 'next' ? 'translate-x-full'  : '-translate-x-full';
-  const slideOut = direction === 'next' ? '-translate-x-full' : 'translate-x-full';
-
   return (
-    <section className="py-14 md:py-16 lg:py-20 relative">
-      {/* Keyframes injected once */}
+    <section className="py-16 md:py-20 lg:py-24 relative overflow-hidden bg-[#060F0A] text-zinc-100">
+      
+      {/* Structural 3D Transforms CSS Injection */}
       <style>{`
-        @keyframes fp-fade-up   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fp-fade-blur { from { opacity:0; filter:blur(8px); transform:translateY(6px); } to { opacity:1; filter:blur(0); transform:translateY(0); } }
-        @keyframes fp-progress  { from { width:0%; } to { width:100%; } }
-        .fp-fade-up   { animation: fp-fade-up   0.45s cubic-bezier(.22,1,.36,1) both; }
-        .fp-fade-blur { animation: fp-fade-blur 0.5s  cubic-bezier(.22,1,.36,1) both; }
-        .fp-name      { animation: fp-fade-up   0.5s  cubic-bezier(.22,1,.36,1) 0.05s both; }
-        .fp-desc      { animation: fp-fade-blur 0.5s  cubic-bezier(.22,1,.36,1) 0.12s both; }
-        .fp-tags      { animation: fp-fade-up   0.45s cubic-bezier(.22,1,.36,1) 0.18s both; }
-        .fp-bars      { animation: fp-fade-up   0.45s cubic-bezier(.22,1,.36,1) 0.24s both; }
-        .fp-ctas      { animation: fp-fade-up   0.45s cubic-bezier(.22,1,.36,1) 0.30s both; }
-        .fp-progress-bar { animation: fp-progress 5s linear both; }
+        .carousel-perspective {
+          perspective: 1400px;
+        }
+        .card-perspective-container {
+          perspective: 1200px;
+          transform-style: preserve-3d;
+        }
+        .flip-card-inner {
+          transform-style: preserve-3d;
+          transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .flip-card-inner.flipped {
+          transform: rotateY(180deg);
+        }
+        .side-front, .side-back {
+          backface-visibility: hidden;
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 1.5rem;
+        }
+        .side-back {
+          transform: rotateY(180deg);
+        }
       `}</style>
 
-      <div className="container">
-        {/* Header */}
-        <div className="flex items-end justify-between mb-8 md:mb-10 gap-6 reveal">
-          <div>
-            <p className="eyebrow mb-3">Curated Selection</p>
-            <h2 className="font-display text-display-lg text-foreground">Featured Strains</h2>
+      <div className="container mx-auto px-4 max-w-7xl relative z-10">
+        
+        {/* Title and Header row */}
+        <div className="flex items-end justify-between mb-12 md:mb-16 gap-6">
+          <div className="space-y-2">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-emerald-500/90">Curated Selection</p>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-white">
+              Featured Strains
+            </h2>
           </div>
-          <Button variant="ghost" onClick={() => navigate('/products')} className="group text-foreground hover:text-accent shrink-0">
+          
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/products')} 
+            className="group text-zinc-300 hover:text-white hover:bg-zinc-900/40 shrink-0 text-sm font-medium tracking-wide"
+          >
             View All
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
 
-        {/* Main card */}
-        <div className="reveal rounded-3xl border border-border/60 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.6)] overflow-hidden">
-          <div
-            className="grid md:grid-cols-[1fr_1fr] lg:grid-cols-[5fr_6fr]"
-            style={{ minHeight: 'clamp(420px, 60vw, 600px)' }}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
+        {/* 3D Multi-Card Carousel Track */}
+        <div className="carousel-perspective relative w-full h-[520px] md:h-[560px] flex items-center justify-center select-none overflow-visible">
+          <div className="relative w-full h-full flex items-center justify-center overflow-visible">
+            {products.map((product, index) => {
+              const category = product.category.toLowerCase();
+              const colors = categoryColor[category] || categoryColor.indica;
+              const price = 800 + Math.round(product.thc * 30);
+              const fallback = imageMap[category] || indicaImg;
 
-            {/* ── LEFT: Photo panel ── */}
-            <div className="relative flex flex-col p-4 sm:p-5" style={{ background: 'hsl(var(--surface-deep))' }}>
-              {/* Photo card with overflow clip */}
-              <div className="relative flex-1 rounded-2xl overflow-hidden" style={{ minHeight: '320px' }}>
+              // Infinite cyclical calculation mapping out left, center, and right neighbors
+              let offset = index - activeIndex;
+              if (offset < -Math.floor(products.length / 2)) offset += products.length;
+              if (offset > Math.floor(products.length / 2)) offset -= products.length;
 
-                {/* Outgoing image (slides out) */}
-                {animating && prevProduct && (
-                  <img
-                    src={prevProduct.image_url || prevFallback || indicaImg}
-                    alt=""
-                    aria-hidden="true"
-                    className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[650ms] ease-[cubic-bezier(.4,0,.2,1)] ${slideOut}`}
-                  />
-                )}
+              const isCenter = offset === 0;
+              const isVisible = Math.abs(offset) <= 2; // Only render immediate visible cluster
 
-                {/* Active image (slides in) */}
-                <img
-                  key={`img-${product.id}`}
-                  src={product.image_url || fallback}
-                  alt={product.name}
-                  className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[650ms] ease-[cubic-bezier(.4,0,.2,1)] ${animating ? slideIn : 'translate-x-0'}`}
-                  style={{ transitionDelay: animating ? '0ms' : undefined }}
-                  onLoad={e => { (e.target as HTMLImageElement).style.transform = 'translateX(0)'; }}
-                />
+              if (!isVisible) return null;
 
-                {/* Ken-Burns subtle zoom on active */}
+              // Compute precise absolute spatial layouts based on current placement distance
+              let translateX = '0%';
+              let scale = 1;
+              let rotateY = 0;
+              let zIndex = 10;
+              let opacity = 1;
+
+              if (offset === 0) {
+                translateX = '0%';
+                scale = 1.05;
+                rotateY = 0;
+                zIndex = 30;
+                opacity = 1;
+              } else if (offset === 1) {
+                translateX = '108%';
+                scale = 0.88;
+                rotateY = -12;
+                zIndex = 20;
+                opacity = 0.65;
+              } else if (offset === -1) {
+                translateX = '-108%';
+                scale = 0.88;
+                rotateY = 12;
+                zIndex = 20;
+                opacity = 0.65;
+              } else if (offset === 2) {
+                translateX = '210%';
+                scale = 0.75;
+                rotateY = -20;
+                zIndex = 10;
+                opacity = 0.2;
+              } else if (offset === -2) {
+                translateX = '-210%';
+                scale = 0.75;
+                rotateY = 20;
+                zIndex = 10;
+                opacity = 0.2;
+              }
+
+              return (
                 <div
-                  key={`kb-${product.id}`}
-                  className="absolute inset-0 w-full h-full"
+                  key={product.id}
+                  className="absolute w-[290px] sm:w-[320px] md:w-[350px] h-[460px] sm:h-[490px] md:h-[520px] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
                   style={{
-                    backgroundImage: `url(${product.image_url || fallback})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    animation: 'kenburns 8s ease-out forwards',
+                    transform: `translateX(${translateX}) scale(${scale}) rotateY(${rotateY}deg)`,
+                    zIndex: zIndex,
+                    opacity: opacity,
+                    pointerEvents: isCenter ? 'auto' : 'none', // Block click actions on background slides
                   }}
-                />
-                <style>{`@keyframes kenburns { from { transform:scale(1.06); } to { transform:scale(1); } }`}</style>
+                >
+                  <div className="card-perspective-container w-full h-full">
+                    <div className={`flip-card-inner w-full h-full relative rounded-3xl shadow-[0_30px_70px_-15px_rgba(0,0,0,0.9)] ${isCenter && isFlipped ? 'flipped' : ''}`}>
+                      
+                      {/* ── CARD FRONT VIEW ── */}
+                      <div className="side-front overflow-hidden border border-zinc-800/80 bg-zinc-950 flex flex-col justify-between p-5 relative">
+                        {/* High-Resolution Product Asset Rendering */}
+                        <img
+                          src={product.image_url || fallback}
+                          alt={product.name}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[4000ms] ease-out scale-100"
+                          loading="lazy"
+                        />
+                        {/* High-Contrast Vignette Scrim Overlays */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/20 pointer-events-none" />
 
-                {/* Bottom scrim */}
-                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
-
-                {/* Badges top-left */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-                  <span key={`cat-${product.id}`} className={`fp-fade-up inline-flex items-center gap-1.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.14em] px-3 py-1 ring-1 backdrop-blur-sm ${colors.badge}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                    {product.category}
-                  </span>
-                  {product.is_new && (
-                    <span key={`new-${product.id}`} className="fp-fade-up inline-flex items-center gap-1 rounded-full bg-accent text-accent-foreground text-[10px] font-semibold uppercase tracking-[0.14em] px-3 py-1" style={{ animationDelay: '0.06s' }}>
-                      <Sparkles className="h-3 w-3" strokeWidth={2.5} />New
-                    </span>
-                  )}
-                  {product.is_popular && (
-                    <span key={`pop-${product.id}`} className="fp-fade-up inline-flex items-center gap-1 rounded-full bg-foreground/90 text-background text-[10px] font-semibold uppercase tracking-[0.14em] px-3 py-1" style={{ animationDelay: '0.1s' }}>
-                      <Star className="h-3 w-3" strokeWidth={2.5} />Popular
-                    </span>
-                  )}
-                </div>
-
-                {/* Shield top-right */}
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="inline-flex items-center justify-center rounded-full h-8 w-8 ring-1 ring-white/20" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }} title="Lab Tested">
-                    <ShieldCheck className="h-4 w-4 text-accent" strokeWidth={2.25} />
-                  </span>
-                </div>
-
-                {/* Price bottom-left */}
-                <div className="absolute bottom-10 left-4 z-10">
-                  <span key={`price-${product.id}`} className="fp-fade-up rounded-full text-accent font-display text-base font-bold px-4 py-1.5" style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', animationDelay: '0.04s' }}>
-                    ฿{price.toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Dots bottom-center */}
-                <div className="absolute bottom-3 left-0 right-0 z-10 flex justify-center gap-1.5">
-                  {products.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => { stopAutoplay(); goTo(i, i > activeIndex ? 'next' : 'prev'); }}
-                      aria-label={`Go to product ${i + 1}`}
-                      className={`rounded-full transition-all duration-400 ${i === activeIndex ? 'w-5 h-2 bg-accent' : 'w-2 h-2 bg-white/35 hover:bg-white/65'}`}
-                    />
-                  ))}
-                </div>
-
-                {/* Progress bar (autoplay indicator) */}
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10 z-10 overflow-hidden rounded-b-2xl">
-                  <div key={`prog-${activeIndex}`} className="h-full bg-accent/70 fp-progress-bar" />
-                </div>
-              </div>
-            </div>
-
-            {/* ── RIGHT: Details panel ── */}
-            <div className="flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12" style={{ background: 'hsl(var(--surface))' }}>
-
-              {/* Counter + nav */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground tabular-nums">
-                  {String(activeIndex + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
-                </span>
-                <div className="flex gap-2">
-                  {[{ fn: handlePrev, icon: ChevronLeft, label: 'Previous' }, { fn: handleNext, icon: ChevronRight, label: 'Next' }].map(({ fn, icon: Icon, label }) => (
-                    <button
-                      key={label}
-                      onClick={fn}
-                      aria-label={label}
-                      className="flex items-center justify-center w-9 h-9 rounded-full border border-border/60 text-foreground/60 hover:text-accent hover:border-accent/50 hover:bg-accent/5 active:scale-95 transition-all duration-200"
-                    >
-                      <Icon className="h-4 w-4" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Animated text block */}
-              <div className="flex-1 flex flex-col justify-center gap-3 py-5">
-                {textVisible && (
-                  <>
-                    <h3 key={`n-${product.id}`} className="fp-name font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight text-foreground">
-                      {product.name}
-                    </h3>
-                    <p key={`d-${product.id}`} className="fp-desc text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                      {product.description}
-                    </p>
-                    {'effects' in product && Array.isArray((product as any).effects) && (product as any).effects.length > 0 && (
-                      <div key={`t-${product.id}`} className="fp-tags flex flex-wrap gap-2 pt-1">
-                        {((product as any).effects as string[]).map((effect: string, ei: number) => (
-                          <span
-                            key={effect}
-                            className="rounded-full border border-border/50 text-foreground/60 text-[11px] font-medium uppercase tracking-[0.12em] px-3 py-1 transition-colors hover:border-accent/40 hover:text-foreground/80"
-                            style={{ background: 'hsl(var(--foreground) / 0.04)', animationDelay: `${0.18 + ei * 0.04}s` }}
-                          >
-                            {effect}
+                        {/* Top Structural Information Row */}
+                        <div className="relative z-10 flex flex-col gap-2 items-start">
+                          <span className={`inline-flex items-center gap-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 ring-1 backdrop-blur-md ${colors.badge}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                            {product.category}
                           </span>
-                        ))}
+                          
+                          {product.is_new && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 text-zinc-950 text-[10px] font-bold uppercase tracking-widest px-3 py-1 shadow-md">
+                              <Sparkles className="h-3 w-3 fill-current" /> New
+                            </span>
+                          )}
+                          
+                          {product.is_popular && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 text-zinc-950 text-[10px] font-bold uppercase tracking-widest px-3 py-1 shadow-md">
+                              <Star className="h-3 w-3 fill-current" /> Popular
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Quality Assurance Verification Emblem */}
+                        <div className="absolute top-5 right-5 z-10">
+                          <span className="inline-flex items-center justify-center rounded-full h-8 w-8 ring-1 ring-white/10 bg-black/40 backdrop-blur-md" title="Lab Certified">
+                            <ShieldCheck className="h-4 w-4 text-emerald-400" strokeWidth={2.5} />
+                          </span>
+                        </div>
+
+                        {/* Bottom Metric Stack */}
+                        <div className="relative z-10 w-full mt-auto space-y-3.5">
+                          <div className="flex justify-between items-center">
+                            <span className="rounded-lg text-amber-400 font-mono text-xs font-semibold px-2.5 py-1 bg-black/70 backdrop-blur-sm ring-1 ring-white/10 shadow-sm">
+                              ฿{price.toLocaleString()}
+                            </span>
+                          </div>
+                          
+                          <h3 className="font-serif text-2xl font-normal tracking-wide text-white line-clamp-1">
+                            {product.name}
+                          </h3>
+                        </div>
                       </div>
-                    )}
-                  </>
-                )}
-              </div>
 
-              {/* THC / CBD bars */}
-              {textVisible && (
-                <div key={`b-${product.id}`} className="fp-bars flex gap-3 mb-5">
-                  <div className="flex-1 rounded-xl bg-accent/10 ring-1 ring-accent/20 px-4 py-3">
-                    <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] mb-2">
-                      <span className="text-accent">THC</span>
-                      <span className="text-foreground tabular-nums">{product.thc}%</span>
-                    </div>
-                    <div className="h-1 rounded-full bg-foreground/10 overflow-hidden">
-                      <div
-                        key={`thc-${product.id}`}
-                        className="h-full bg-accent rounded-full"
-                        style={{ width: `${Math.min(product.thc * 3, 100)}%`, transition: 'width 0.8s cubic-bezier(.4,0,.2,1) 0.3s' }}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-1 rounded-xl bg-primary/15 ring-1 ring-primary/25 px-4 py-3">
-                    <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] mb-2">
-                      <span className="text-primary-foreground/80">CBD</span>
-                      <span className="text-foreground tabular-nums">{product.cbd}%</span>
-                    </div>
-                    <div className="h-1 rounded-full bg-foreground/10 overflow-hidden">
-                      <div
-                        key={`cbd-${product.id}`}
-                        className="h-full bg-primary rounded-full"
-                        style={{ width: `${Math.min(product.cbd * 10, 100)}%`, transition: 'width 0.8s cubic-bezier(.4,0,.2,1) 0.4s' }}
-                      />
+                      {/* ── CARD BACK VIEW (Product Stats Deck) ── */}
+                      <div className="side-back overflow-hidden border border-zinc-800/90 p-6 flex flex-col justify-between bg-[#07110B] relative shadow-inner">
+                        {/* Structural mesh grid texture pattern background overlay */}
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+                        
+                        <div className="relative z-10">
+                          <div className="flex justify-between items-center border-b border-zinc-800/80 pb-3 mb-4">
+                            <span className={`text-xs font-bold uppercase tracking-wider ${colors.text}`}>
+                              {product.category} Strain
+                            </span>
+                            <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                              Overview
+                            </span>
+                          </div>
+
+                          <h3 className="font-serif text-2xl font-normal text-white mb-2 line-clamp-1">
+                            {product.name}
+                          </h3>
+                          <p className="text-xs text-zinc-400 leading-relaxed line-clamp-5 mb-4">
+                            {product.description}
+                          </p>
+
+                          {/* Dynamic Strain Effect Badges */}
+                          {'effects' in product && Array.isArray((product as any).effects) && (product as any).effects.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {((product as any).effects as string[]).slice(0, 3).map((effect: string) => (
+                                <span
+                                  key={effect}
+                                  className="rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 text-[10px] font-medium tracking-wide px-2.5 py-0.5"
+                                >
+                                  {effect}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Cannabinoid Analytical Levels bars */}
+                        <div className="relative z-10 space-y-2.5 my-2">
+                          {/* THC Content Progress Grid Block */}
+                          <div className="rounded-xl bg-emerald-500/[0.02] border border-emerald-500/10 px-3.5 py-2.5">
+                            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest mb-1.5">
+                              <span className="text-emerald-400">THC Content</span>
+                              <span className="text-white font-mono">{product.thc}%</span>
+                            </div>
+                            <div className="h-1 rounded-full bg-zinc-900 overflow-hidden">
+                              <div
+                                className="h-full bg-emerald-400 rounded-full transition-all duration-1000 ease-out"
+                                style={{ width: (isCenter && isFlipped) ? `${Math.min(product.thc * 3.3, 100)}%` : '0%' }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* CBD Content Progress Grid Block */}
+                          <div className="rounded-xl bg-zinc-900/40 border border-zinc-800/80 px-3.5 py-2.5">
+                            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest mb-1.5">
+                              <span className="text-zinc-400">CBD Content</span>
+                              <span className="text-white font-mono">{product.cbd}%</span>
+                            </div>
+                            <div className="h-1 rounded-full bg-zinc-900 overflow-hidden">
+                              <div
+                                className="h-full bg-zinc-400 rounded-full transition-all duration-1000 ease-out delay-100"
+                                style={{ width: (isCenter && isFlipped) ? `${Math.min(product.cbd * 10, 100)}%` : '0%' }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Dynamic Conversion Call-to-Actions Row */}
+                        <div className="relative z-10 flex gap-2 w-full pt-3.5 border-t border-zinc-800/60">
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/products/${product.id}`);
+                            }}
+                            className="flex-1 bg-emerald-500 text-zinc-950 hover:bg-emerald-400 active:scale-[0.96] font-bold uppercase tracking-wider text-[10px] h-10 gap-1.5 transition-all shadow-sm"
+                          >
+                            Details
+                            <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                          </Button>
+                          
+                          <a
+                            href="https://line.me/R/ti/p/@674dxgnq"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 rounded-lg bg-[#00B900]/10 text-[#00B900] hover:bg-[#00B900] hover:text-white active:scale-[0.96] text-[10px] font-bold uppercase tracking-wider transition-all ring-1 ring-[#00B900]/30"
+                          >
+                            LINE
+                          </a>
+                        </div>
+
+                      </div>
+
                     </div>
                   </div>
                 </div>
-              )}
-
-              {/* CTAs */}
-              {textVisible && (
-                <div key={`c-${product.id}`} className="fp-ctas flex gap-3 flex-wrap">
-                  <Button
-                    onClick={() => navigate(`/products/${product.id}`)}
-                    className="flex-1 min-w-[120px] bg-accent text-accent-foreground hover:bg-accent/90 active:scale-[0.98] font-semibold uppercase tracking-[0.1em] text-xs gap-2 transition-all duration-200"
-                  >
-                    View Details
-                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.5} />
-                  </Button>
-                  <a
-                    href="https://line.me/R/ti/p/@674dxgnq"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 h-10 rounded-lg bg-[#00B900]/10 text-[#00B900] hover:bg-[#00B900] hover:text-white active:scale-[0.98] text-xs font-semibold uppercase tracking-[0.1em] transition-all duration-200 ring-1 ring-[#00B900]/30"
-                  >
-                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-                    </svg>
-                    Inquire on LINE
-                  </a>
-                </div>
-              )}
-            </div>
+              );
+            })}
           </div>
         </div>
 
+        {/* Dynamic Pagination Matrix Dots Block */}
+        <div className="w-full flex justify-center items-center gap-2 mt-4 relative z-20">
+          {products.map((_, i) => (
+            <div
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                i === activeIndex ? 'w-8 bg-amber-500' : 'w-1.5 bg-zinc-800'
+              }`}
+            />
+          ))}
+        </div>
+        
       </div>
     </section>
   );
