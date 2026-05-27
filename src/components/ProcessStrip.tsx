@@ -13,25 +13,25 @@ const steps = [
     icon: Sprout,
     title: "Hand-Cultivated",
     desc: "Small-batch indoor grows in Bangkok with strict environmental controls.",
-    photo:"src/assets/hand_cultivated_no_text.png",
+    photo:"/hand_cultivated_no_text.png",
   },
   {
     icon: Award,
     title: "Slow-Cured",
     desc: "Traditional curing for 21+ days to preserve terpenes and aroma.",
-    photo: "src/assets/slow_cured_3.png", 
+    photo: "/slow_cured_3.png", 
   },
   {
     icon: FlaskConical,
     title: "Lab Tested",
     desc: "Third-party potency and purity testing on every harvest.",
-    photo: "src/assets/lab_tested_3.png", 
+    photo: "/lab_tested_3.png", 
   },
   {
     icon: ShieldCheck,
     title: "Compliant",
     desc: "Fully licensed under Thai Ministry of Public Health regulations.",
-    photo: "src/assets/compliant_no_text.png", 
+    photo: "/compliant_no_text.png", 
   },
 ];
 
