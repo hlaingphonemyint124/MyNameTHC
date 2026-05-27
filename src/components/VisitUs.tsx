@@ -22,7 +22,7 @@ export const VisitUs = () => {
             </p>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mb-4 leading-[1.05]">
               Come find us in{" "}
-              <span className="text-accent">Bangkok</span>.
+              <span className="text-accent">Chiang Mai</span>.
             </h2>
             <p className="text-base text-muted-foreground leading-relaxed mb-8 max-w-md">
               Step inside My Name THC for a guided tour of our curated strains.
