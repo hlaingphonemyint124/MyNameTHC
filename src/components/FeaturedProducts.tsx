@@ -938,35 +938,102 @@ export const FeaturedProducts = () => {
         </div>
 
         {/* ══ Bottom Navigation — thumbnail strip + counter + arrows ══ */}
-        <div className="fp-reveal flex flex-col items-center gap-5 mt-10"
-          style={{ transitionDelay:'160ms' }}>
+<div className="fp-reveal flex flex-col items-center gap-4 mt-10"
+  style={{ transitionDelay:'160ms' }}>
 
-          {/* FEATURE: Thumbnail strip */}
-          <div className="flex items-center gap-4">
-            <button onClick={handlePrev} aria-label="Previous strain"
-              className="fp-nav-btn w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0">
-              <ChevronLeft className="w-5 h-5 text-white/70" />
-            </button>
+  {/* Strip + arrows row — safe on all mobile widths */}
+  <div
+    className="flex items-center gap-2 w-full"
+    style={{ maxWidth: '100%', padding: '0 4px' }}
+  >
+    {/* Prev arrow */}
+    <button
+      onClick={handlePrev}
+      aria-label="Previous strain"
+      className="fp-nav-btn flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+    >
+      <ChevronLeft className="w-4 h-4 text-white/70" />
+    </button>
 
-            <ThumbnailStrip products={products} currentIndex={currentIndex} onSelect={goTo} />
-
-            <button onClick={handleNext} aria-label="Next strain"
-              className="fp-nav-btn w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+    {/* Scrollable thumbnail strip */}
+    <div
+      className="flex-1 overflow-x-auto"
+      style={{
+        scrollbarWidth: 'none',          /* Firefox */
+        msOverflowStyle: 'none',         /* IE */
+        WebkitOverflowScrolling: 'touch',
+      }}
+    >
+      <style>{`.fp-thumb-scroll::-webkit-scrollbar { display: none; }`}</style>
+      <div
+        className="fp-thumb-scroll flex items-center justify-start gap-2.5 py-1"
+        style={{
+          minWidth: 'max-content',
+          paddingLeft: '4px',
+          paddingRight: '4px',
+        }}
+      >
+        {products.map((p, idx) => {
+          const isActive = idx === currentIndex;
+          const tCat  = p.category.toLowerCase();
+          const tCfg  = getCfg(tCat);
+          const tImg  = p.image_url || IMAGE_MAP[tCat] || indicaImg;
+          return (
+            <button
+              key={p.id}
+              onClick={() => goTo(idx)}
+              aria-label={`Go to ${p.name}`}
+              className="relative rounded-2xl overflow-hidden flex-shrink-0 transition-all duration-350"
               style={{
-                background:`rgba(${cfg.glowRgb},0.18)`,
-                border:`1px solid rgba(${cfg.glowRgb},0.45)`,
-                boxShadow:`0 0 22px rgba(${cfg.glowRgb},0.28)`,
-                transition:'all 0.35s ease',
-              }}>
-              <ChevronRight className="w-5 h-5 text-white" />
+                width:         isActive ? 52 : 38,
+                height:        isActive ? 52 : 38,
+                outline:       isActive ? `2px solid ${tCfg.accent}` : '2px solid rgba(255,255,255,0.1)',
+                outlineOffset: isActive ? '3px' : '2px',
+                boxShadow:     isActive ? `0 0 18px 2px rgba(${tCfg.glowRgb},0.6)` : 'none',
+                transform:     isActive ? 'scale(1.08)' : 'scale(1)',
+                transition:    'all 0.35s cubic-bezier(.25,1,.5,1)',
+                opacity:       isActive ? 1 : 0.55,
+              }}
+            >
+              <img
+                src={tImg}
+                alt={p.name}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+              {isActive && (
+                <div
+                  className="absolute inset-0 rounded-2xl pointer-events-none fp-thumb-ring"
+                  style={{ border: `1.5px solid rgba(${tCfg.glowRgb},0.7)` }}
+                />
+              )}
             </button>
-          </div>
+          );
+        })}
+      </div>
+    </div>
 
-          {/* Active strain name label */}
-          <p className="text-[10px] uppercase tracking-[0.28em] text-white/35 transition-all duration-300">
-            {product.name}
-          </p>
-        </div>
+    {/* Next arrow */}
+    <button
+      onClick={handleNext}
+      aria-label="Next strain"
+      className="fp-nav-btn flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+      style={{
+        background:  `rgba(${cfg.glowRgb},0.18)`,
+        border:      `1px solid rgba(${cfg.glowRgb},0.45)`,
+        boxShadow:   `0 0 22px rgba(${cfg.glowRgb},0.28)`,
+        transition:  'all 0.35s ease',
+      }}
+    >
+      <ChevronRight className="w-4 h-4 text-white" />
+    </button>
+  </div>
+
+  {/* Active strain name label */}
+  <p className="text-[10px] uppercase tracking-[0.28em] text-white/35 transition-all duration-300">
+    {product.name}
+  </p>
+</div>
 
       </div>
     </section>
