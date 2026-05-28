@@ -142,19 +142,19 @@ function GalaxyCanvas() {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   FEATURE 1 — Floating Particles (smoke wisps per category)
+   Floating Particles
 ───────────────────────────────────────────────────────────────── */
 interface Particle { id:number; x:number; size:number; dur:number; delay:number; drift:number }
 
-function FloatingParticles({ glowRgb, accent }: { glowRgb: string; accent: string }) {
+function FloatingParticles({ glowRgb }: { glowRgb: string }) {
   const particles = useMemo<Particle[]>(() =>
-    Array.from({ length: 14 }, (_, i) => ({
-      id:    i,
-      x:     10 + Math.random() * 80,        // % across image width
-      size:  3  + Math.random() * 6,
-      dur:   3.5 + Math.random() * 3,
+    Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      x: 10 + Math.random() * 80,
+      size: 3 + Math.random() * 5,
+      dur: 3.5 + Math.random() * 3,
       delay: Math.random() * 4,
-      drift: (Math.random() - 0.5) * 30,
+      drift: (Math.random() - 0.5) * 28,
     }))
   , [glowRgb]);
 
@@ -165,15 +165,15 @@ function FloatingParticles({ glowRgb, accent }: { glowRgb: string; accent: strin
           key={p.id}
           className="fp-particle absolute rounded-full"
           style={{
-            left:     `${p.x}%`,
-            bottom:   '-10px',
-            width:    p.size,
-            height:   p.size,
+            left: `${p.x}%`,
+            bottom: '-8px',
+            width: p.size,
+            height: p.size,
             background: `radial-gradient(circle, rgba(${glowRgb},0.9) 0%, rgba(${glowRgb},0.2) 60%, transparent 100%)`,
-            boxShadow:  `0 0 ${p.size * 2}px rgba(${glowRgb},0.6)`,
+            boxShadow: `0 0 ${p.size * 2}px rgba(${glowRgb},0.6)`,
             animationDuration: `${p.dur}s`,
-            animationDelay:    `${p.delay}s`,
-            '--drift':         `${p.drift}px`,
+            animationDelay: `${p.delay}s`,
+            '--drift': `${p.drift}px`,
           } as React.CSSProperties}
         />
       ))}
@@ -182,27 +182,25 @@ function FloatingParticles({ glowRgb, accent }: { glowRgb: string; accent: strin
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   FEATURE 2 — Animated number flip (strain counter)
+   Flip Number
 ───────────────────────────────────────────────────────────────── */
 function FlipNumber({ value, pad = 2 }: { value: number; pad?: number }) {
   const [displayed, setDisplayed] = useState(value);
-  const [flipping,  setFlipping]  = useState(false);
-
+  const [flipping, setFlipping] = useState(false);
   useEffect(() => {
     if (value === displayed) return;
     setFlipping(true);
     const t = setTimeout(() => { setDisplayed(value); setFlipping(false); }, 220);
     return () => clearTimeout(t);
   }, [value]);
-
   return (
     <span
       className="fp-flip-num inline-block font-mono font-bold tabular-nums"
       style={{
-        transform:  flipping ? 'translateY(-100%) scaleY(0.4)' : 'translateY(0) scaleY(1)',
-        opacity:    flipping ? 0 : 1,
+        transform: flipping ? 'translateY(-100%) scaleY(0.4)' : 'translateY(0) scaleY(1)',
+        opacity: flipping ? 0 : 1,
         transition: 'transform 0.22s cubic-bezier(.25,1,.5,1), opacity 0.18s ease',
-        display:    'inline-block',
+        display: 'inline-block',
       }}
     >
       {String(displayed).padStart(pad, '0')}
@@ -220,13 +218,13 @@ function TiltCard({
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const el = ref.current; if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width  - 0.5;
-    const y = (e.clientY - rect.top)  / rect.height - 0.5;
-    el.style.transform = `perspective(1100px) rotateX(${y*9}deg) rotateY(${-x*9}deg) scale3d(1.018,1.018,1.018)`;
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transform = `perspective(1100px) rotateX(${y * 7}deg) rotateY(${-x * 7}deg) scale3d(1.015,1.015,1.015)`;
     const shine = el.querySelector<HTMLElement>('.fp-shine');
     if (shine) {
-      shine.style.opacity    = '1';
-      shine.style.background = `radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%, rgba(255,255,255,0.10) 0%, transparent 65%)`;
+      shine.style.opacity = '1';
+      shine.style.background = `radial-gradient(circle at ${(x + .5) * 100}% ${(y + .5) * 100}%, rgba(255,255,255,0.09) 0%, transparent 65%)`;
     }
   }, []);
   const onMouseLeave = useCallback(() => {
@@ -251,15 +249,14 @@ function TiltCard({
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   FEATURE 3 — Directional slide transition
+   Slide Transition
 ───────────────────────────────────────────────────────────────── */
 function SlideTransition({
   id, direction, children, className = '',
-}: { id: string|number; direction: 'next'|'prev'; children: React.ReactNode; className?: string }) {
-  const [phase, setPhase] = useState<'enter'|'visible'>('visible');
-  const prevId  = useRef(id);
+}: { id: string | number; direction: 'next' | 'prev'; children: React.ReactNode; className?: string }) {
+  const [phase, setPhase] = useState<'enter' | 'visible'>('visible');
+  const prevId = useRef(id);
   const mounted = useRef(false);
-
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
     if (id === prevId.current) return;
@@ -268,15 +265,14 @@ function SlideTransition({
     const t = setTimeout(() => setPhase('visible'), 30);
     return () => clearTimeout(t);
   }, [id]);
-
-  const enterX = direction === 'next' ? 32 : -32;
+  const enterX = direction === 'next' ? 28 : -28;
   return (
     <div
       className={className}
       style={{
-        opacity:    phase === 'enter' ? 0 : 1,
-        transform:  phase === 'enter' ? `translateX(${enterX}px) scale(0.98)` : 'translateX(0) scale(1)',
-        transition: 'opacity 0.42s cubic-bezier(.25,1,.5,1), transform 0.42s cubic-bezier(.25,1,.5,1)',
+        opacity: phase === 'enter' ? 0 : 1,
+        transform: phase === 'enter' ? `translateX(${enterX}px) scale(0.98)` : 'translateX(0) scale(1)',
+        transition: 'opacity 0.4s cubic-bezier(.25,1,.5,1), transform 0.4s cubic-bezier(.25,1,.5,1)',
       }}
     >
       {children}
@@ -285,83 +281,58 @@ function SlideTransition({
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   FEATURE 4 — THC/CBD bar with shimmer sweep
+   Shimmer Bar
 ───────────────────────────────────────────────────────────────── */
 function ShimmerBar({
   pct, barClass, glowRgb, delay = 0,
 }: { pct: number; barClass: string; glowRgb: string; delay?: number }) {
   return (
-    <div className="relative h-2 rounded-full overflow-hidden"
-      style={{ background: 'rgba(255,255,255,0.08)' }}>
+    <div className="relative h-1.5 rounded-full overflow-hidden"
+      style={{ background: 'rgba(255,255,255,0.07)' }}>
       <div
         className={`fp-bar h-full rounded-full ${barClass} relative overflow-hidden`}
         style={{
-          width:            `${Math.min(pct, 100)}%`,
-          boxShadow:        `0 0 14px rgba(${glowRgb},0.75)`,
-          animationDelay:   `${delay}s`,
+          width: `${Math.min(pct, 100)}%`,
+          boxShadow: `0 0 12px rgba(${glowRgb},0.7)`,
+          animationDelay: `${delay}s`,
         }}
       >
-        {/* Shimmer sweep — plays once after bar fills */}
-        <div
-          className="fp-shimmer absolute inset-y-0 left-0 w-[60%]"
-          style={{ animationDelay: `${delay + 1.1}s` }}
-        />
+        <div className="fp-shimmer absolute inset-y-0 left-0 w-[60%]"
+          style={{ animationDelay: `${delay + 1.0}s` }} />
       </div>
     </div>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   FEATURE 5 — Thumbnail strip
+   Skeleton Loading
 ───────────────────────────────────────────────────────────────── */
-function ThumbnailStrip({
-  products, currentIndex, onSelect,
-}: {
-  products: any[];
-  currentIndex: number;
-  onSelect: (i: number) => void;
-}) {
+function SkeletonLoader() {
   return (
-    <div className="flex items-center justify-center gap-3">
-      {products.map((p, idx) => {
-        const isActive = idx === currentIndex;
-        const tCat  = p.category.toLowerCase();
-        const tCfg  = getCfg(tCat);
-        const tImg  = p.image_url || IMAGE_MAP[tCat] || indicaImg;
-        return (
-          <button
-            key={p.id}
-            onClick={() => onSelect(idx)}
-            aria-label={`Go to ${p.name}`}
-            className="relative rounded-2xl overflow-hidden flex-shrink-0 transition-all duration-350"
-            style={{
-              width:      isActive ? 56 : 40,
-              height:     isActive ? 56 : 40,
-              outline:    isActive ? `2px solid ${tCfg.accent}` : '2px solid rgba(255,255,255,0.1)',
-              outlineOffset: isActive ? '3px' : '2px',
-              boxShadow:  isActive ? `0 0 18px 2px rgba(${tCfg.glowRgb},0.6)` : 'none',
-              transform:  isActive ? 'scale(1.08)' : 'scale(1)',
-              transition: 'all 0.35s cubic-bezier(.25,1,.5,1)',
-              opacity:    isActive ? 1 : 0.55,
-            }}
-          >
-            <img
-              src={tImg}
-              alt={p.name}
-              className="w-full h-full object-cover"
-              draggable={false}
-            />
-            {/* Active glow ring pulse */}
-            {isActive && (
-              <div
-                className="absolute inset-0 rounded-2xl pointer-events-none fp-thumb-ring"
-                style={{ border: `1.5px solid rgba(${tCfg.glowRgb},0.7)` }}
-              />
-            )}
-          </button>
-        );
-      })}
-    </div>
+    <section className="relative overflow-hidden min-h-[600px] flex items-center">
+      <GalaxyCanvas />
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10 w-full">
+        {/* Header skeleton */}
+        <div className="flex items-end justify-between mb-10 gap-4">
+          <div className="space-y-3">
+            <div className="fp-skeleton h-3 w-28 rounded-full" />
+            <div className="fp-skeleton h-10 w-56 rounded-xl" />
+          </div>
+          <div className="fp-skeleton h-9 w-24 rounded-xl" />
+        </div>
+        {/* Desktop card skeleton */}
+        <div className="hidden md:flex items-center gap-0">
+          <div className="fp-skeleton rounded-3xl flex-shrink-0"
+            style={{ width: 'clamp(280px,36vw,420px)', aspectRatio: '1/1' }} />
+          <div className="flex-1 rounded-3xl fp-skeleton ml-[-60px] h-[320px]" />
+        </div>
+        {/* Mobile skeleton */}
+        <div className="md:hidden max-w-[420px] mx-auto space-y-4">
+          <div className="fp-skeleton rounded-3xl w-full" style={{ aspectRatio: '4/3' }} />
+          <div className="fp-skeleton rounded-3xl h-[280px] w-full" />
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -373,14 +344,15 @@ export const FeaturedProducts = () => {
   const navigate = useNavigate();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction,    setDirection]    = useState<'next'|'prev'>('next');
-  const [autoPlay,     setAutoPlay]     = useState(true);
-  const autoRef    = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const [autoPlay, setAutoPlay] = useState(true);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
-  /* ── navigation helpers ── */
-  const navigate_ = useCallback((dir: 'next'|'prev') => {
+  /* ── navigation ── */
+  const navigate_ = useCallback((dir: 'next' | 'prev') => {
     setDirection(dir);
     setCurrentIndex(i =>
       dir === 'next'
@@ -412,18 +384,24 @@ export const FeaturedProducts = () => {
     setCurrentIndex(idx);
   }, [currentIndex, stopAuto]);
 
-  /* ── swipe ── */
-  const onTouchStart = useCallback((e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; }, []);
-  const onTouchEnd   = useCallback((e: React.TouchEvent) => {
+  /* ── swipe — only horizontal, ignore vertical scroll ── */
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+  const onTouchEnd = useCallback((e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(dx) > 44) dx < 0 ? handleNext() : handlePrev();
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+      dx < 0 ? handleNext() : handlePrev();
+    }
   }, [handleNext, handlePrev]);
 
-  /* ── keyboard nav ── */
+  /* ── keyboard ── */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft')  handlePrev();
+      if (e.key === 'ArrowLeft') handlePrev();
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
@@ -435,236 +413,240 @@ export const FeaturedProducts = () => {
     if (!el || loading) return;
     const obs = new IntersectionObserver(
       es => es.forEach(e => e.target.classList.toggle('fp-in', e.isIntersecting)),
-      { threshold: 0.05 },
+      { threshold: 0.04 },
     );
     el.querySelectorAll('.fp-reveal').forEach(n => obs.observe(n));
     return () => obs.disconnect();
   }, [loading]);
 
-  /* ── loading ── */
-  if (loading) {
-    return (
-      <section className="relative overflow-hidden min-h-[560px] flex items-center justify-center">
-        <GalaxyCanvas />
-        <div className="relative z-10 flex flex-col items-center gap-5">
-          <div className="w-14 h-14 rounded-full border-2 border-t-transparent animate-spin"
-            style={{ borderColor: 'rgba(16,185,129,0.6)', borderTopColor: 'transparent' }} />
-          <p className="text-[11px] uppercase tracking-[0.3em] text-white/30">Loading strains…</p>
-        </div>
-      </section>
-    );
-  }
+  if (loading) return <SkeletonLoader />;
   if (products.length === 0) return null;
 
-  const product  = products[currentIndex];
-  const cat      = product.category.toLowerCase();
-  const cfg      = getCfg(cat);
+  const product = products[currentIndex];
+  const cat = product.category.toLowerCase();
+  const cfg = getCfg(cat);
   const fallback = IMAGE_MAP[cat] ?? indicaImg;
-  const imgSrc   = product.image_url || fallback;
-  const price    = 800 + Math.round(product.thc * 30);
-  const total    = products.length;
+  const imgSrc = product.image_url || fallback;
+  const price = 800 + Math.round(product.thc * 30);
+  const total = products.length;
+  const effects: string[] = Array.isArray((product as any).effects) ? (product as any).effects : [];
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden text-white py-14 md:py-20 w-full"
+      className="relative overflow-hidden text-white py-12 md:py-20 w-full"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* ══ Global styles ══════════════════════════════════════ */}
+      {/* ══ Global Styles ══ */}
       <style>{`
-        /* ── Scroll reveal ── */
+        /* Scroll reveal */
         .fp-reveal {
-          opacity:0; transform:translateY(26px);
-          transition: opacity .7s cubic-bezier(.25,1,.5,1), transform .7s cubic-bezier(.25,1,.5,1);
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity .65s cubic-bezier(.25,1,.5,1), transform .65s cubic-bezier(.25,1,.5,1);
         }
-        .fp-reveal.fp-in { opacity:1; transform:translateY(0); }
+        .fp-reveal.fp-in { opacity: 1; transform: translateY(0); }
 
-        /* ── THC/CBD bar fill ── */
-        @keyframes fp-bar { from { width:0% } }
+        /* Bar fill */
+        @keyframes fp-bar { from { width: 0% } }
         .fp-bar { animation: fp-bar 1.1s cubic-bezier(.25,1,.5,1) forwards; }
 
-        /* ── Bar shimmer sweep ── */
+        /* Shimmer sweep */
         @keyframes fp-shimmer-sweep {
           0%   { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
           20%  { opacity: 1; }
           100% { transform: translateX(250%) skewX(-15deg); opacity: 0; }
         }
         .fp-shimmer {
-          background: linear-gradient(to right, transparent, rgba(255,255,255,0.55), transparent);
-          animation: fp-shimmer-sweep 0.9s cubic-bezier(.25,1,.5,1) 1 forwards;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent);
+          animation: fp-shimmer-sweep 0.85s cubic-bezier(.25,1,.5,1) 1 forwards;
           pointer-events: none;
         }
 
-        /* ── Image Ken Burns zoom ── */
+        /* Ken Burns */
         @keyframes fp-kenburns {
-          from { transform: scale(1.08) translateX(1%);  }
-          to   { transform: scale(1.0)  translateX(0%); }
+          from { transform: scale(1.07) translateX(1%); }
+          to   { transform: scale(1.0) translateX(0%); }
         }
         .fp-kenburns { animation: fp-kenburns 6s cubic-bezier(.25,1,.5,1) forwards; }
 
-        /* ── Floating particles ── */
+        /* Floating particles */
         @keyframes fp-float {
           0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
           15%  { opacity: 1; }
-          85%  { opacity: 0.6; }
-          100% { transform: translateY(-220px) translateX(var(--drift)) scale(0.3); opacity: 0; }
+          85%  { opacity: 0.5; }
+          100% { transform: translateY(-200px) translateX(var(--drift)) scale(0.2); opacity: 0; }
         }
-        .fp-particle { animation: fp-float var(--dur,4s) ease-in-out infinite; }
+        .fp-particle { animation: fp-float var(--dur, 4s) ease-in-out infinite; }
 
-        /* ── Card border breathing glow ── */
+        /* Glow pulse */
         @keyframes fp-glow-pulse {
-          0%,100% { opacity: 0.30; }
-          50%     { opacity: 0.65; }
+          0%, 100% { opacity: 0.28; }
+          50%       { opacity: 0.60; }
         }
         .fp-glow-border { animation: fp-glow-pulse 3s ease-in-out infinite; }
 
-        /* ── Thumbnail pulse ring ── */
+        /* Thumb ring pulse */
         @keyframes fp-thumb-pulse {
-          0%   { transform: scale(1);   opacity: 0.7; }
-          100% { transform: scale(1.5); opacity: 0; }
+          0%   { transform: scale(1);   opacity: 0.6; }
+          100% { transform: scale(1.6); opacity: 0; }
         }
         .fp-thumb-ring { animation: fp-thumb-pulse 2.2s ease-out infinite; }
 
-        /* ── Staggered content entrance ── */
+        /* Staggered content */
         .fp-stagger > * {
           opacity: 0;
-          transform: translateY(12px);
-          animation: fp-stagger-in 0.48s cubic-bezier(.25,1,.5,1) forwards;
+          transform: translateY(10px);
+          animation: fp-stagger-in 0.45s cubic-bezier(.25,1,.5,1) forwards;
         }
-        @keyframes fp-stagger-in {
-          to { opacity:1; transform:translateY(0); }
-        }
+        @keyframes fp-stagger-in { to { opacity: 1; transform: translateY(0); } }
         .fp-stagger > *:nth-child(1) { animation-delay: 0.04s; }
-        .fp-stagger > *:nth-child(2) { animation-delay: 0.11s; }
-        .fp-stagger > *:nth-child(3) { animation-delay: 0.18s; }
-        .fp-stagger > *:nth-child(4) { animation-delay: 0.25s; }
-        .fp-stagger > *:nth-child(5) { animation-delay: 0.32s; }
-        .fp-stagger > *:nth-child(6) { animation-delay: 0.39s; }
+        .fp-stagger > *:nth-child(2) { animation-delay: 0.10s; }
+        .fp-stagger > *:nth-child(3) { animation-delay: 0.16s; }
+        .fp-stagger > *:nth-child(4) { animation-delay: 0.22s; }
+        .fp-stagger > *:nth-child(5) { animation-delay: 0.28s; }
+        .fp-stagger > *:nth-child(6) { animation-delay: 0.34s; }
 
-        /* ── Nav button ── */
+        /* Nav button */
         .fp-nav-btn {
-          background: rgba(0,0,0,0.65);
-          border: 1px solid rgba(255,255,255,0.14);
+          background: rgba(0,0,0,0.60);
+          border: 1px solid rgba(255,255,255,0.13);
           transition: all 0.22s ease;
+          -webkit-tap-highlight-color: transparent;
         }
         .fp-nav-btn:hover {
-          background: rgba(16,185,129,0.15);
-          border-color: rgba(16,185,129,0.5);
-          box-shadow: 0 0 22px rgba(16,185,129,0.3);
-          transform: scale(1.1);
+          background: rgba(16,185,129,0.14);
+          border-color: rgba(16,185,129,0.48);
+          box-shadow: 0 0 20px rgba(16,185,129,0.28);
         }
-        .fp-nav-btn:active { transform: scale(0.92); }
+        .fp-nav-btn:active { transform: scale(0.90); }
 
-        /* ── Autoplay progress bar ── */
-        @keyframes fp-progress { from { transform:scaleX(0) } to { transform:scaleX(1) } }
+        /* Autoplay progress */
+        @keyframes fp-progress { from { transform: scaleX(0) } to { transform: scaleX(1) } }
         .fp-progress { animation: fp-progress 5.5s linear forwards; transform-origin: left; }
 
-        /* ── Spotlight behind image ── */
+        /* Spotlight */
         @keyframes fp-spotlight {
-          0%,100% { opacity: 0.55; transform: scale(1);   }
-          50%      { opacity: 0.80; transform: scale(1.08); }
+          0%, 100% { opacity: 0.50; transform: scale(1); }
+          50%       { opacity: 0.75; transform: scale(1.08); }
         }
         .fp-spotlight { animation: fp-spotlight 4s ease-in-out infinite; }
+
+        /* Skeleton shimmer */
+        @keyframes fp-skel {
+          0%   { background-position: -200% 0; }
+          100% { background-position:  200% 0; }
+        }
+        .fp-skeleton {
+          background: linear-gradient(90deg,
+            rgba(255,255,255,0.04) 25%,
+            rgba(255,255,255,0.10) 50%,
+            rgba(255,255,255,0.04) 75%
+          );
+          background-size: 200% 100%;
+          animation: fp-skel 1.6s ease-in-out infinite;
+        }
+
+        /* Hide scrollbar cross-browser */
+        .fp-strip-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+        .fp-strip-scroll::-webkit-scrollbar { display: none; }
+
+        /* Effects pill overflow clamp */
+        .fp-effects { display: flex; flex-wrap: wrap; gap: 6px; }
+        .fp-effects-mob { display: flex; flex-wrap: nowrap; overflow: hidden; gap: 6px; }
       `}</style>
 
-      {/* ══ Background ═══════════════════════════════════════ */}
+      {/* ══ Background ══ */}
       <div className="absolute inset-0">
         <GalaxyCanvas />
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 115% 95% at 50% 50%, transparent 28%, rgba(0,0,0,0.68) 100%)' }} />
-        {/* Dynamic category spotlight */}
+          style={{ background: 'radial-gradient(ellipse 120% 100% at 50% 50%, transparent 25%, rgba(0,0,0,0.65) 100%)' }} />
         <div
           key={cat + '-spotlight'}
           className="fp-spotlight absolute pointer-events-none rounded-full"
           style={{
             width: '55vw', height: '55vw',
-            left: '10%', top: '5%',
-            background: `radial-gradient(circle, rgba(${cfg.glowRgb},0.07) 0%, transparent 70%)`,
-            transition: 'background 1.2s ease',
+            left: '8%', top: '4%',
+            background: `radial-gradient(circle, rgba(${cfg.glowRgb},0.065) 0%, transparent 70%)`,
+            transition: 'background 1.1s ease',
           }}
         />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
 
-        {/* ══ Header ════════════════════════════════════════ */}
-        <div className="fp-reveal flex items-end justify-between mb-10 md:mb-14 gap-4">
+        {/* ══ Header ══ */}
+        <div className="fp-reveal flex items-end justify-between mb-8 md:mb-12 gap-4">
           <div className="space-y-2">
-            <p className="text-[10px] tracking-[0.35em] uppercase flex items-center gap-2"
-              style={{ color: 'rgba(16,185,129,0.75)' }}>
+            <p className="text-[10px] tracking-[0.34em] uppercase flex items-center gap-2"
+              style={{ color: 'rgba(16,185,129,0.72)' }}>
               <Leaf className="h-3 w-3" />Curated Selection
             </p>
-            <h2 className="font-display text-4xl md:text-5xl font-normal leading-[1.05] tracking-tight text-white">
+            <h2 className="font-display leading-[1.05] tracking-tight text-white"
+              style={{ fontSize: 'clamp(1.9rem, 5vw, 3.2rem)', fontWeight: 400 }}>
               Featured{' '}
               <span className="italic" style={{ color: 'hsl(var(--accent))' }}>Strains</span>
             </h2>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            {/* ── FEATURE: strain counter ── */}
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}>
               <span className="text-sm" style={{ color: cfg.accent }}>
                 <FlipNumber value={currentIndex + 1} />
               </span>
-              <span className="text-[11px] text-white/30">/</span>
-              <span className="text-sm text-white/40 font-mono">{String(total).padStart(2,'0')}</span>
+              <span className="text-[11px] text-white/25">/</span>
+              <span className="text-sm text-white/35 font-mono">{String(total).padStart(2, '0')}</span>
             </div>
-
             {!autoPlay && (
               <button onClick={() => setAutoPlay(true)} title="Resume auto-play"
                 className="fp-nav-btn flex items-center justify-center h-9 w-9 rounded-full">
-                <RotateCcw className="h-3.5 w-3.5 text-white/60" />
+                <RotateCcw className="h-3.5 w-3.5 text-white/55" />
               </button>
             )}
             <Button variant="ghost" onClick={() => navigate('/products')}
               className="group text-sm font-medium tracking-wide rounded-xl
-                border border-white/15 hover:border-white/35
-                text-white/55 hover:text-white transition-all hover:bg-white/5">
+                border border-white/12 hover:border-white/30
+                text-white/50 hover:text-white transition-all hover:bg-white/5">
               View All
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </div>
 
-        {/* ══ DESKTOP + TABLET LAYOUT ═══════════════════════ */}
-        <div className="fp-reveal hidden md:block" style={{ transitionDelay: '80ms' }}>
-          <div className="flex items-center relative">
+        {/* ══ DESKTOP LAYOUT (md+) ══ */}
+        <div className="fp-reveal hidden md:block" style={{ transitionDelay: '70ms' }}>
+          <div className="flex items-stretch relative">
 
-            {/* ── Image — z-0 (behind card) ── */}
+            {/* Image */}
             <div
               className="flex-shrink-0 relative rounded-3xl overflow-hidden"
-              style={{ width: 'clamp(300px,40vw,460px)', aspectRatio:'1/1', zIndex:0 }}
+              style={{
+                width: 'clamp(260px, 36vw, 420px)',
+                aspectRatio: '1/1',
+                zIndex: 0,
+              }}
             >
-              {/* Outer glow — no border-inset on right edge */}
               <div className="absolute inset-0 rounded-3xl pointer-events-none z-20"
-                style={{ boxShadow: `0 0 80px -8px rgba(${cfg.glowRgb},0.45)`, transition: 'box-shadow 0.8s ease' }} />
-
-              {/* Right-edge dissolve into card */}
+                style={{ boxShadow: `0 0 70px -10px rgba(${cfg.glowRgb},0.42)`, transition: 'box-shadow 0.8s ease' }} />
+              {/* Right dissolve */}
               <div className="absolute inset-y-0 right-0 z-20 pointer-events-none"
-                style={{ width:'48%', background:'linear-gradient(to right, transparent 0%, #050a06 100%)' }} />
+                style={{ width: '46%', background: 'linear-gradient(to right, transparent 0%, #050a06 100%)' }} />
 
-              {/* FEATURE: Ken Burns image */}
               <SlideTransition id={product.id} direction={direction} className="absolute inset-0 w-full h-full">
-                <img
-                  key={product.id}
-                  src={imgSrc}
-                  alt={product.name}
-                  className="fp-kenburns w-full h-full object-cover"
-                  draggable={false}
-                />
+                <img key={product.id} src={imgSrc} alt={product.name}
+                  className="fp-kenburns w-full h-full object-cover" draggable={false} />
               </SlideTransition>
 
               <div className="absolute inset-0 z-[2] pointer-events-none"
-                style={{ background:'linear-gradient(to top,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.08) 50%,transparent 100%)' }} />
+                style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 50%, transparent 100%)' }} />
 
-              {/* FEATURE: Floating particles */}
-              <FloatingParticles glowRgb={cfg.glowRgb} accent={cfg.accent} />
+              <FloatingParticles glowRgb={cfg.glowRgb} />
 
               {/* Badges */}
               <div className="absolute top-4 left-4 z-30 flex flex-col gap-2">
-                <span className={`inline-flex items-center gap-1.5 rounded-full text-[9px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 backdrop-blur-md ${cfg.badge}`}>
+                <span className={`inline-flex items-center gap-1.5 rounded-full text-[9px] font-bold uppercase tracking-[0.13em] px-3 py-1.5 backdrop-blur-md ${cfg.badge}`}>
                   <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${cfg.dotClass}`} />
                   {product.category}
                 </span>
@@ -674,7 +656,7 @@ export const FeaturedProducts = () => {
                   </span>
                 )}
                 {product.is_popular && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/92 text-black text-[8px] font-bold uppercase tracking-[0.1em] px-2.5 py-1">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-black text-[8px] font-bold uppercase tracking-[0.1em] px-2.5 py-1">
                     <Star className="h-2.5 w-2.5 fill-current" />Popular
                   </span>
                 )}
@@ -684,98 +666,91 @@ export const FeaturedProducts = () => {
               <div className="absolute top-4 right-4 z-30">
                 <div className="relative">
                   <div className="fp-glow-border absolute inset-0 rounded-full pointer-events-none"
-                    style={{ border:`1px solid rgba(${cfg.glowRgb},0.6)`, borderRadius:'50%' }} />
+                    style={{ border: `1px solid rgba(${cfg.glowRgb},0.55)`, borderRadius: '50%' }} />
                   <span className="relative flex items-center justify-center h-9 w-9 rounded-full"
-                    style={{ background:'rgba(0,0,0,0.75)', border:`1px solid rgba(${cfg.glowRgb},0.4)` }}>
+                    style={{ background: 'rgba(0,0,0,0.72)', border: `1px solid rgba(${cfg.glowRgb},0.35)` }}>
                     <ShieldCheck className="h-4 w-4" style={{ color: cfg.accent }} strokeWidth={2.5} />
                   </span>
                 </div>
               </div>
 
-              {/* Progress bar */}
+              {/* Progress */}
               {autoPlay && (
-                <div className="absolute bottom-0 inset-x-0 z-30 h-[3px] overflow-hidden rounded-b-3xl"
-                  style={{ background:'rgba(0,0,0,0.3)' }}>
-                  <div key={currentIndex+'-prog'} className="fp-progress h-full rounded-full"
-                    style={{ background:`linear-gradient(to right, ${cfg.accent}, rgba(${cfg.glowRgb},0.5))` }} />
+                <div className="absolute bottom-0 inset-x-0 z-30 h-[2.5px] overflow-hidden rounded-b-3xl"
+                  style={{ background: 'rgba(0,0,0,0.28)' }}>
+                  <div key={currentIndex + '-prog'} className="fp-progress h-full rounded-full"
+                    style={{ background: `linear-gradient(to right, ${cfg.accent}, rgba(${cfg.glowRgb},0.45))` }} />
                 </div>
               )}
             </div>
 
-            {/* ── Info Card — z-10 (in front of image) ── */}
+            {/* Info Card */}
             <TiltCard
-              key={product.id+'-tilt'}
-              className="fp-slide-right flex-1 min-w-0"
-              style={{ marginLeft:'-80px', position:'relative', zIndex:10 }}
+              key={product.id + '-tilt'}
+              className="flex-1 min-w-0"
+              style={{ marginLeft: 'clamp(-50px, -5vw, -80px)', position: 'relative', zIndex: 10 }}
             >
-              <div className="relative rounded-3xl overflow-hidden"
+              <div className="relative rounded-3xl overflow-hidden h-full"
                 style={{
                   background: '#050a06',
-                  borderTop:    `1.5px solid rgba(${cfg.glowRgb},0.35)`,
-                  borderRight:  `1.5px solid rgba(${cfg.glowRgb},0.35)`,
-                  borderBottom: `1.5px solid rgba(${cfg.glowRgb},0.35)`,
-                  borderLeft:   'none',
-                  boxShadow:    `0 0 65px -12px rgba(${cfg.glowRgb},0.55),
-                                 0 32px 80px -8px rgba(0,0,0,0.92),
-                                 inset 0 1px 0 rgba(255,255,255,0.07)`,
-                  transition:   'border-color 0.8s ease, box-shadow 0.8s ease',
+                  borderTop: `1.5px solid rgba(${cfg.glowRgb},0.32)`,
+                  borderRight: `1.5px solid rgba(${cfg.glowRgb},0.32)`,
+                  borderBottom: `1.5px solid rgba(${cfg.glowRgb},0.32)`,
+                  borderLeft: 'none',
+                  boxShadow: `0 0 60px -14px rgba(${cfg.glowRgb},0.5), 0 30px 70px -8px rgba(0,0,0,0.88), inset 0 1px 0 rgba(255,255,255,0.06)`,
+                  transition: 'border-color 0.8s ease, box-shadow 0.8s ease',
                 }}
               >
-                {/* Breathing glow border overlay */}
-                <div
-                  className="fp-glow-border absolute inset-0 rounded-3xl pointer-events-none z-0"
-                  style={{
-                    background: `radial-gradient(ellipse 80% 60% at 80% 50%, rgba(${cfg.glowRgb},0.06) 0%, transparent 70%)`,
-                    transition: 'background 0.8s ease',
-                  }}
-                />
-
-                {/* Top accent line */}
+                <div className="fp-glow-border absolute inset-0 rounded-3xl pointer-events-none z-0"
+                  style={{ background: `radial-gradient(ellipse 80% 60% at 80% 50%, rgba(${cfg.glowRgb},0.055) 0%, transparent 70%)`, transition: 'background 0.8s ease' }} />
                 <div className="absolute top-0 inset-x-0 h-[2px] z-10"
-                  style={{ background:`linear-gradient(to right, rgba(${cfg.glowRgb},0) 0%, ${cfg.accent} 25%, ${cfg.accent} 75%, transparent 100%)`, transition:'background 0.8s ease' }} />
+                  style={{ background: `linear-gradient(to right, rgba(${cfg.glowRgb},0) 0%, ${cfg.accent} 30%, ${cfg.accent} 70%, transparent 100%)`, transition: 'background 0.8s ease' }} />
 
-                {/* FEATURE: Staggered content entrance */}
-                <div className="relative z-[2] p-7 lg:p-9 pl-14 lg:pl-16">
-                  <SlideTransition id={product.id+'-info'} direction={direction}>
-                    <div className="fp-stagger" key={product.id+'-stagger'}>
+                <div className="relative z-[2] p-6 lg:p-8 pl-12 lg:pl-14">
+                  <SlideTransition id={product.id + '-info'} direction={direction}>
+                    <div className="fp-stagger" key={product.id + '-stagger'}>
 
                       {/* Name + desc */}
-                      <div className="mb-6">
-                        <h3 className="text-2xl lg:text-[1.9rem] font-display font-normal leading-tight mb-2.5"
-                          style={{ textShadow:`0 0 40px rgba(${cfg.glowRgb},0.35)`, transition:'text-shadow 0.8s ease' }}>
+                      <div className="mb-5">
+                        <h3 className="font-display font-normal leading-tight mb-2"
+                          style={{
+                            fontSize: 'clamp(1.3rem, 2.4vw, 1.85rem)',
+                            textShadow: `0 0 36px rgba(${cfg.glowRgb},0.32)`,
+                            transition: 'text-shadow 0.8s ease',
+                          }}>
                           {product.name}
                         </h3>
-                        <p className="text-sm leading-relaxed" style={{ color:'rgba(255,255,255,0.5)' }}>
+                        <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'rgba(255,255,255,0.48)' }}>
                           {product.description}
                         </p>
                       </div>
 
-                      {/* FEATURE: Shimmer bars */}
-                      <div className="space-y-2.5 mb-6">
-                        <div className="rounded-2xl px-4 py-3.5"
-                          style={{ background:'rgba(255,255,255,0.04)', border:`1px solid rgba(${cfg.glowRgb},0.2)` }}>
-                          <div className="flex justify-between items-center mb-2.5">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color:cfg.accent }}>THC</span>
+                      {/* THC / CBD */}
+                      <div className="space-y-2 mb-5">
+                        <div className="rounded-2xl px-4 py-3"
+                          style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(${cfg.glowRgb},0.18)` }}>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.17em]" style={{ color: cfg.accent }}>THC</span>
                             <span className="text-sm font-mono font-bold text-white">{product.thc}%</span>
                           </div>
                           <ShimmerBar pct={product.thc * 3.3} barClass={cfg.barClass} glowRgb={cfg.glowRgb} delay={0.3} />
                         </div>
-                        <div className="rounded-2xl px-4 py-3.5"
-                          style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)' }}>
-                          <div className="flex justify-between items-center mb-2.5">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">CBD</span>
-                            <span className="text-sm font-mono font-bold text-white/70">{product.cbd}%</span>
+                        <div className="rounded-2xl px-4 py-3"
+                          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.17em] text-white/38">CBD</span>
+                            <span className="text-sm font-mono font-bold text-white/65">{product.cbd}%</span>
                           </div>
-                          <ShimmerBar pct={product.cbd * 10} barClass="bg-white/35" glowRgb="255,255,255" delay={0.5} />
+                          <ShimmerBar pct={product.cbd * 10} barClass="bg-white/32" glowRgb="255,255,255" delay={0.5} />
                         </div>
                       </div>
 
                       {/* Effects */}
-                      {'effects' in product && Array.isArray((product as any).effects) && (product as any).effects.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {((product as any).effects as string[]).slice(0,5).map((fx:string) => (
+                      {effects.length > 0 && (
+                        <div className="fp-effects mb-5">
+                          {effects.slice(0, 5).map((fx: string) => (
                             <span key={fx} className="rounded-full text-[9px] font-medium tracking-wide px-3 py-1"
-                              style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.12)', color:'rgba(255,255,255,0.6)' }}>
+                              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.11)', color: 'rgba(255,255,255,0.58)' }}>
                               {fx}
                             </span>
                           ))}
@@ -785,33 +760,32 @@ export const FeaturedProducts = () => {
                       {/* Price + CTAs */}
                       <div className="flex items-center gap-3 flex-wrap">
                         <div className="flex flex-col">
-                          <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 mb-0.5">Price</span>
+                          <span className="text-[9px] uppercase tracking-[0.2em] text-white/28 mb-0.5">Price</span>
                           <span className="text-xl font-mono font-bold"
-                            style={{ color:cfg.accent, textShadow:`0 0 20px rgba(${cfg.glowRgb},0.55)` }}>
+                            style={{ color: cfg.accent, textShadow: `0 0 18px rgba(${cfg.glowRgb},0.5)` }}>
                             ฿{price.toLocaleString()}
                           </span>
                         </div>
                         <button
                           onClick={() => navigate(`/products/${product.id}`)}
-                          className="flex-1 min-w-[120px] h-11 rounded-2xl text-[11px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.96]"
+                          className="flex-1 min-w-[120px] h-11 rounded-2xl text-[11px] font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.96]"
                           style={{
-                            background:`linear-gradient(135deg,${cfg.accent} 0%,rgba(${cfg.glowRgb},0.72) 100%)`,
-                            color:'#000',
-                            boxShadow:`0 4px 24px -4px rgba(${cfg.glowRgb},0.72), 0 1px 0 rgba(255,255,255,0.18) inset`,
+                            background: `linear-gradient(135deg, ${cfg.accent} 0%, rgba(${cfg.glowRgb},0.70) 100%)`,
+                            color: '#000',
+                            boxShadow: `0 4px 22px -4px rgba(${cfg.glowRgb},0.68), 0 1px 0 rgba(255,255,255,0.16) inset`,
                           }}
-                          onMouseEnter={e => (e.currentTarget.style.filter='brightness(1.14)')}
-                          onMouseLeave={e => (e.currentTarget.style.filter='')}
+                          onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(1.12)')}
+                          onMouseLeave={e => (e.currentTarget.style.filter = '')}
                         >
-                          View Details
-                          <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+                          View Details <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
                         </button>
                         <a
                           href="https://line.me/R/ti/p/@674dxgnq"
                           target="_blank" rel="noopener noreferrer"
-                          className="flex-1 min-w-[100px] h-11 rounded-2xl text-[11px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.96]"
-                          style={{ background:'rgba(0,185,0,0.1)', border:'1.5px solid rgba(0,185,0,0.45)', color:'#00B900' }}
-                          onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.background='#00B900'; el.style.color='#fff'; el.style.boxShadow='0 4px 22px -4px rgba(0,185,0,0.65)'; }}
-                          onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.background='rgba(0,185,0,0.1)'; el.style.color='#00B900'; el.style.boxShadow=''; }}
+                          className="flex-1 min-w-[100px] h-11 rounded-2xl text-[11px] font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.96]"
+                          style={{ background: 'rgba(0,185,0,0.09)', border: '1.5px solid rgba(0,185,0,0.42)', color: '#00B900' }}
+                          onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#00B900'; el.style.color = '#fff'; el.style.boxShadow = '0 4px 20px -4px rgba(0,185,0,0.60)'; }}
+                          onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(0,185,0,0.09)'; el.style.color = '#00B900'; el.style.boxShadow = ''; }}
                         >
                           LINE Order
                         </a>
@@ -825,43 +799,45 @@ export const FeaturedProducts = () => {
           </div>
         </div>
 
-        {/* ══ MOBILE LAYOUT ════════════════════════════════ */}
-        <div className="fp-reveal md:hidden" style={{ transitionDelay:'80ms' }}>
-          <div className="max-w-[420px] mx-auto">
+        {/* ══ MOBILE LAYOUT ══ */}
+        <div className="fp-reveal md:hidden" style={{ transitionDelay: '70ms' }}>
+          <div className="mx-auto" style={{ maxWidth: 'min(420px, 100%)' }}>
 
-            {/* Image */}
-            <div className="relative rounded-3xl overflow-hidden mb-5 w-full" style={{ aspectRatio:'1/1' }}>
+            {/* Image — 4:3 on mobile for better content ratio */}
+            <div className="relative rounded-3xl overflow-hidden mb-4 w-full" style={{ aspectRatio: '4/3' }}>
               <div className="absolute inset-0 rounded-3xl pointer-events-none z-20"
-                style={{ boxShadow:`inset 0 0 0 1.5px rgba(${cfg.glowRgb},0.4)`, transition:'box-shadow 0.8s ease' }} />
-              <SlideTransition id={product.id+'-mob'} direction={direction} className="absolute inset-0 w-full h-full">
+                style={{ boxShadow: `inset 0 0 0 1.5px rgba(${cfg.glowRgb},0.38)`, transition: 'box-shadow 0.8s ease' }} />
+              <SlideTransition id={product.id + '-mob'} direction={direction} className="absolute inset-0 w-full h-full">
                 <img src={imgSrc} alt={product.name}
                   className="fp-kenburns w-full h-full object-cover" draggable={false} />
               </SlideTransition>
               <div className="absolute inset-0 z-[2]"
-                style={{ background:'linear-gradient(to top,rgba(0,0,0,0.55) 0%,transparent 60%)' }} />
-              <FloatingParticles glowRgb={cfg.glowRgb} accent={cfg.accent} />
+                style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.52) 0%, transparent 55%)' }} />
+              <FloatingParticles glowRgb={cfg.glowRgb} />
 
-              <div className="absolute top-3.5 left-3.5 z-30 flex flex-col gap-1.5">
-                <span className={`inline-flex items-center gap-1 rounded-full text-[8px] font-bold uppercase tracking-[0.13em] px-2.5 py-1 backdrop-blur-md ${cfg.badge}`}>
+              <div className="absolute top-3 left-3 z-30 flex flex-col gap-1.5">
+                <span className={`inline-flex items-center gap-1 rounded-full text-[8.5px] font-bold uppercase tracking-[0.12em] px-2.5 py-1.5 backdrop-blur-md ${cfg.badge}`}>
                   <span className={`w-1 h-1 rounded-full animate-pulse ${cfg.dotClass}`} />{product.category}
                 </span>
                 {product.is_new && (
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-[hsl(var(--accent))] text-black text-[7.5px] font-bold uppercase tracking-[0.1em] px-2 py-0.5">
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-[hsl(var(--accent))] text-black text-[7.5px] font-bold uppercase tracking-[0.1em] px-2 py-1">
                     <Sparkles className="h-2 w-2" />New
                   </span>
                 )}
               </div>
-              <div className="absolute top-3.5 right-3.5 z-30">
+              <div className="absolute top-3 right-3 z-30">
                 <span className="flex items-center justify-center h-8 w-8 rounded-full"
-                  style={{ background:'rgba(0,0,0,0.75)', border:`1px solid rgba(${cfg.glowRgb},0.4)` }}>
-                  <ShieldCheck className="h-3.5 w-3.5" style={{ color:cfg.accent }} strokeWidth={2.5} />
+                  style={{ background: 'rgba(0,0,0,0.72)', border: `1px solid rgba(${cfg.glowRgb},0.38)` }}>
+                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: cfg.accent }} strokeWidth={2.5} />
                 </span>
               </div>
+
+              {/* Progress inside image */}
               {autoPlay && (
-                <div className="absolute bottom-0 inset-x-0 z-30 h-[3px] overflow-hidden rounded-b-3xl"
-                  style={{ background:'rgba(0,0,0,0.3)' }}>
-                  <div key={currentIndex+'-mob-prog'} className="fp-progress h-full rounded-full"
-                    style={{ background:`linear-gradient(to right,${cfg.accent},rgba(${cfg.glowRgb},0.5))` }} />
+                <div className="absolute bottom-0 inset-x-0 z-30 h-[2.5px] overflow-hidden rounded-b-3xl"
+                  style={{ background: 'rgba(0,0,0,0.28)' }}>
+                  <div key={currentIndex + '-mob-prog'} className="fp-progress h-full rounded-full"
+                    style={{ background: `linear-gradient(to right, ${cfg.accent}, rgba(${cfg.glowRgb},0.45))` }} />
                 </div>
               )}
             </div>
@@ -869,66 +845,100 @@ export const FeaturedProducts = () => {
             {/* Card */}
             <div className="rounded-3xl overflow-hidden relative"
               style={{
-                background:'#050a06',
-                border:`1.5px solid rgba(${cfg.glowRgb},0.32)`,
-                boxShadow:`0 0 50px -12px rgba(${cfg.glowRgb},0.5), 0 20px 60px rgba(0,0,0,0.85)`,
-                transition:'border-color 0.8s ease, box-shadow 0.8s ease',
+                background: '#050a06',
+                border: `1.5px solid rgba(${cfg.glowRgb},0.30)`,
+                boxShadow: `0 0 44px -12px rgba(${cfg.glowRgb},0.45), 0 18px 50px rgba(0,0,0,0.82)`,
+                transition: 'border-color 0.8s ease, box-shadow 0.8s ease',
               }}>
               <div className="absolute top-0 inset-x-0 h-[2px]"
-                style={{ background:`linear-gradient(to right,transparent,${cfg.accent},transparent)`, transition:'background 0.8s ease' }} />
+                style={{ background: `linear-gradient(to right, transparent, ${cfg.accent}, transparent)`, transition: 'background 0.8s ease' }} />
+
               <div className="relative p-5">
-                <SlideTransition id={product.id+'-mob-info'} direction={direction}>
-                  <div className="fp-stagger" key={product.id+'-mob-stagger'}>
+                <SlideTransition id={product.id + '-mob-info'} direction={direction}>
+                  <div className="fp-stagger" key={product.id + '-mob-stagger'}>
+
                     <div className="mb-4">
-                      <h3 className="text-xl font-display font-normal text-white leading-tight mb-1.5">{product.name}</h3>
-                      <p className="text-xs leading-relaxed line-clamp-2" style={{ color:'rgba(255,255,255,0.48)' }}>{product.description}</p>
+                      <h3 className="font-display font-normal text-white leading-tight mb-1.5"
+                        style={{ fontSize: 'clamp(1.2rem, 5.5vw, 1.5rem)' }}>
+                        {product.name}
+                      </h3>
+                      <p className="text-xs leading-relaxed line-clamp-2" style={{ color: 'rgba(255,255,255,0.46)' }}>
+                        {product.description}
+                      </p>
                     </div>
+
+                    {/* THC / CBD */}
                     <div className="space-y-2 mb-4">
                       <div className="rounded-xl px-3.5 py-2.5"
-                        style={{ background:'rgba(255,255,255,0.04)', border:`1px solid rgba(${cfg.glowRgb},0.2)` }}>
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.15em]" style={{ color:cfg.accent }}>THC</span>
+                        style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(${cfg.glowRgb},0.18)` }}>
+                        <div className="flex justify-between items-center mb-1.5">
+                          <span className="text-[9px] font-bold uppercase tracking-[0.15em]" style={{ color: cfg.accent }}>THC</span>
                           <span className="text-xs font-mono font-bold text-white">{product.thc}%</span>
                         </div>
-                        <ShimmerBar pct={product.thc*3.3} barClass={cfg.barClass} glowRgb={cfg.glowRgb} delay={0.3} />
+                        <ShimmerBar pct={product.thc * 3.3} barClass={cfg.barClass} glowRgb={cfg.glowRgb} delay={0.3} />
                       </div>
                       <div className="rounded-xl px-3.5 py-2.5"
-                        style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)' }}>
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/38">CBD</span>
-                          <span className="text-xs font-mono font-bold text-white/65">{product.cbd}%</span>
+                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                        <div className="flex justify-between items-center mb-1.5">
+                          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/36">CBD</span>
+                          <span className="text-xs font-mono font-bold text-white/62">{product.cbd}%</span>
                         </div>
-                        <ShimmerBar pct={product.cbd*10} barClass="bg-white/35" glowRgb="255,255,255" delay={0.5} />
+                        <ShimmerBar pct={product.cbd * 10} barClass="bg-white/32" glowRgb="255,255,255" delay={0.5} />
                       </div>
                     </div>
-                    {'effects' in product && Array.isArray((product as any).effects) && (product as any).effects.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {((product as any).effects as string[]).slice(0,4).map((fx:string) => (
-                          <span key={fx} className="rounded-full text-[8.5px] font-medium tracking-wide px-2.5 py-0.5"
-                            style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.55)' }}>{fx}</span>
+
+                    {/* Effects — max 3 on mobile, +N overflow pill */}
+                    {effects.length > 0 && (
+                      <div className="fp-effects-mob mb-4" style={{ maxWidth: '100%' }}>
+                        {effects.slice(0, 3).map((fx: string) => (
+                          <span key={fx} className="flex-shrink-0 rounded-full text-[8.5px] font-medium tracking-wide px-2.5 py-1"
+                            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.54)' }}>
+                            {fx}
+                          </span>
                         ))}
+                        {effects.length > 3 && (
+                          <span className="flex-shrink-0 rounded-full text-[8.5px] font-medium px-2.5 py-1"
+                            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.35)' }}>
+                            +{effects.length - 3}
+                          </span>
+                        )}
                       </div>
                     )}
+
+                    {/* Price row */}
                     <div className="flex items-center justify-between mb-3.5">
-                      <span className="text-base font-mono font-bold" style={{ color:cfg.accent }}>฿{price.toLocaleString()}</span>
+                      <span className="font-mono font-bold" style={{ fontSize: 'clamp(1rem, 4.5vw, 1.2rem)', color: cfg.accent }}>
+                        ฿{price.toLocaleString()}
+                      </span>
                       {product.is_popular && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-white/90 text-black text-[7.5px] font-bold uppercase tracking-[0.1em] px-2 py-0.5">
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-white/88 text-black text-[7.5px] font-bold uppercase tracking-[0.1em] px-2 py-1">
                           <Star className="h-2 w-2 fill-current" />Popular
                         </span>
                       )}
                     </div>
+
+                    {/* CTAs */}
                     <div className="flex gap-2.5">
-                      <button onClick={() => navigate(`/products/${product.id}`)}
-                        className="flex-1 h-10 rounded-xl text-[10px] font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-1.5 transition-all active:scale-[0.96]"
-                        style={{ background:`linear-gradient(135deg,${cfg.accent},rgba(${cfg.glowRgb},0.72))`, color:'#000', boxShadow:`0 4px 20px -4px rgba(${cfg.glowRgb},0.65)` }}>
-                        View Details<ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      <button
+                        onClick={() => navigate(`/products/${product.id}`)}
+                        className="flex-1 rounded-xl text-[10px] font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-1.5 transition-all active:scale-[0.95]"
+                        style={{
+                          height: '44px',
+                          background: `linear-gradient(135deg, ${cfg.accent}, rgba(${cfg.glowRgb},0.70))`,
+                          color: '#000',
+                          boxShadow: `0 4px 18px -4px rgba(${cfg.glowRgb},0.62)`,
+                        }}>
+                        View Details <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
                       </button>
-                      <a href="https://line.me/R/ti/p/@674dxgnq" target="_blank" rel="noopener noreferrer"
-                        className="flex-1 h-10 rounded-xl text-[10px] font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-1.5 transition-all active:scale-[0.96]"
-                        style={{ background:'rgba(0,185,0,0.1)', border:'1.5px solid rgba(0,185,0,0.4)', color:'#00B900' }}>
+                      <a
+                        href="https://line.me/R/ti/p/@674dxgnq"
+                        target="_blank" rel="noopener noreferrer"
+                        className="flex-1 rounded-xl text-[10px] font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-1.5 transition-all active:scale-[0.95]"
+                        style={{ height: '44px', background: 'rgba(0,185,0,0.09)', border: '1.5px solid rgba(0,185,0,0.38)', color: '#00B900' }}>
                         LINE Order
                       </a>
                     </div>
+
                   </div>
                 </SlideTransition>
               </div>
@@ -937,103 +947,91 @@ export const FeaturedProducts = () => {
           </div>
         </div>
 
-        {/* ══ Bottom Navigation — thumbnail strip + counter + arrows ══ */}
-<div className="fp-reveal flex flex-col items-center gap-4 mt-10"
-  style={{ transitionDelay:'160ms' }}>
+        {/* ══ Bottom Navigation — FIXED: always contained in max-w-6xl, never bleeds full-width ══ */}
+        <div className="fp-reveal mt-8 md:mt-10" style={{ transitionDelay: '140ms' }}>
 
-  {/* Strip + arrows row — safe on all mobile widths */}
-  <div
-    className="flex items-center gap-2 w-full"
-    style={{ maxWidth: '100%', padding: '0 4px' }}
-  >
-    {/* Prev arrow */}
-    <button
-      onClick={handlePrev}
-      aria-label="Previous strain"
-      className="fp-nav-btn flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
-    >
-      <ChevronLeft className="w-4 h-4 text-white/70" />
-    </button>
+          {/* Single contained row: prev | thumbnails | next */}
+          <div className="flex items-center gap-3" style={{ maxWidth: '100%' }}>
 
-    {/* Scrollable thumbnail strip */}
-    <div
-      className="flex-1 overflow-x-auto"
-      style={{
-        scrollbarWidth: 'none',          /* Firefox */
-        msOverflowStyle: 'none',         /* IE */
-        WebkitOverflowScrolling: 'touch',
-      }}
-    >
-      <style>{`.fp-thumb-scroll::-webkit-scrollbar { display: none; }`}</style>
-      <div
-        className="fp-thumb-scroll flex items-center justify-start gap-2.5 py-1"
-        style={{
-          minWidth: 'max-content',
-          paddingLeft: '4px',
-          paddingRight: '4px',
-        }}
-      >
-        {products.map((p, idx) => {
-          const isActive = idx === currentIndex;
-          const tCat  = p.category.toLowerCase();
-          const tCfg  = getCfg(tCat);
-          const tImg  = p.image_url || IMAGE_MAP[tCat] || indicaImg;
-          return (
+            {/* Prev — always visible, never clipped */}
             <button
-              key={p.id}
-              onClick={() => goTo(idx)}
-              aria-label={`Go to ${p.name}`}
-              className="relative rounded-2xl overflow-hidden flex-shrink-0 transition-all duration-350"
+              onClick={handlePrev}
+              aria-label="Previous strain"
+              className="fp-nav-btn flex-shrink-0 rounded-full flex items-center justify-center"
+              style={{ width: 44, height: 44, minWidth: 44 }}
+            >
+              <ChevronLeft className="w-5 h-5 text-white/65" />
+            </button>
+
+            {/* Scrollable thumbnail strip — fills remaining space */}
+            <div
+              className="fp-strip-scroll flex-1 overflow-x-auto"
+              style={{ WebkitOverflowScrolling: 'touch' as any }}
+            >
+              <div className="flex items-center gap-2.5 py-1" style={{ width: 'max-content', paddingLeft: 2, paddingRight: 2 }}>
+                {products.map((p, idx) => {
+                  const isActive = idx === currentIndex;
+                  const tCat = p.category.toLowerCase();
+                  const tCfg = getCfg(tCat);
+                  const tImg = p.image_url || IMAGE_MAP[tCat] || indicaImg;
+                  /* 44px inactive meets iOS HIG minimum tap target */
+                  const size = isActive ? 52 : 44;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => goTo(idx)}
+                      aria-label={`Go to ${p.name}`}
+                      className="relative rounded-2xl overflow-hidden flex-shrink-0"
+                      style={{
+                        width: size,
+                        height: size,
+                        outline: isActive ? `2px solid ${tCfg.accent}` : '2px solid rgba(255,255,255,0.09)',
+                        outlineOffset: isActive ? '3px' : '2px',
+                        boxShadow: isActive ? `0 0 16px 2px rgba(${tCfg.glowRgb},0.55)` : 'none',
+                        transform: isActive ? 'scale(1.07)' : 'scale(1)',
+                        opacity: isActive ? 1 : 0.50,
+                        transition: 'all 0.32s cubic-bezier(.25,1,.5,1)',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
+                    >
+                      <img src={tImg} alt={p.name}
+                        className="w-full h-full object-cover" draggable={false} />
+                      {isActive && (
+                        <div
+                          className="absolute inset-0 rounded-2xl pointer-events-none fp-thumb-ring"
+                          style={{ border: `1.5px solid rgba(${tCfg.glowRgb},0.65)` }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Next — always visible, accented */}
+            <button
+              onClick={handleNext}
+              aria-label="Next strain"
+              className="fp-nav-btn flex-shrink-0 rounded-full flex items-center justify-center"
               style={{
-                width:         isActive ? 52 : 38,
-                height:        isActive ? 52 : 38,
-                outline:       isActive ? `2px solid ${tCfg.accent}` : '2px solid rgba(255,255,255,0.1)',
-                outlineOffset: isActive ? '3px' : '2px',
-                boxShadow:     isActive ? `0 0 18px 2px rgba(${tCfg.glowRgb},0.6)` : 'none',
-                transform:     isActive ? 'scale(1.08)' : 'scale(1)',
-                transition:    'all 0.35s cubic-bezier(.25,1,.5,1)',
-                opacity:       isActive ? 1 : 0.55,
+                width: 44,
+                height: 44,
+                minWidth: 44,
+                background: `rgba(${cfg.glowRgb}, 0.16)`,
+                border: `1px solid rgba(${cfg.glowRgb}, 0.42)`,
+                boxShadow: `0 0 20px rgba(${cfg.glowRgb}, 0.25)`,
+                transition: 'all 0.32s ease',
               }}
             >
-              <img
-                src={tImg}
-                alt={p.name}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-              {isActive && (
-                <div
-                  className="absolute inset-0 rounded-2xl pointer-events-none fp-thumb-ring"
-                  style={{ border: `1.5px solid rgba(${tCfg.glowRgb},0.7)` }}
-                />
-              )}
+              <ChevronRight className="w-5 h-5 text-white" />
             </button>
-          );
-        })}
-      </div>
-    </div>
+          </div>
 
-    {/* Next arrow */}
-    <button
-      onClick={handleNext}
-      aria-label="Next strain"
-      className="fp-nav-btn flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
-      style={{
-        background:  `rgba(${cfg.glowRgb},0.18)`,
-        border:      `1px solid rgba(${cfg.glowRgb},0.45)`,
-        boxShadow:   `0 0 22px rgba(${cfg.glowRgb},0.28)`,
-        transition:  'all 0.35s ease',
-      }}
-    >
-      <ChevronRight className="w-4 h-4 text-white" />
-    </button>
-  </div>
-
-  {/* Active strain name label */}
-  <p className="text-[10px] uppercase tracking-[0.28em] text-white/35 transition-all duration-300">
-    {product.name}
-  </p>
-</div>
+          {/* Active strain label */}
+          <p className="text-center text-[9.5px] uppercase tracking-[0.28em] text-white/30 mt-3 transition-all duration-300">
+            {product.name}
+          </p>
+        </div>
 
       </div>
     </section>
